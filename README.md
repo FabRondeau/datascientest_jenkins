@@ -513,3 +513,714 @@ Un développeur formé aux pratiques DevOps peut télécharger l'image officiell
 Docker implémente un outil Docker Hub CLI qui est actuellement expérimental et une API (Micro-service) qui nous permet de communiquer avec Docker Hub. Nous pouvons parcourir la documentation de l'API Docker Hub pour rechercher les points de terminaison entre accolades.
 
 Vous pouvez créer un compte Dockerhub à l'adresse suivante : https://hub.docker.com/signup. Nous nous en servirons dans la suite de notre cours.
+# IV - Pipeline Jenkins
+
+## A - Présentation
+Dans Jenkins, un pipeline est défini comme une série d'événements ou de tâches qui sont interconnectés et qui s’exécutent dans un ordre particulier. En d'autres termes, le pipeline Jenkins est un ensemble de modules ou de plugins qui permettent la mise en œuvre et l'intégration ou livraison continue au sein de Jenkins.
+
+Le pipeline Jenkins dispose d'un système d'automatisation extensible pour créer des pipelines de distribution de "modèles" via le langage spécifique au domaine (DSL) utilisé dans le pipeline.
+
+Il existe quatre états de livraison continue dans le pipeline Jenkins :
+
+* Construire (build)
+* Déployer (dans un environnement de test)
+* Tester
+* Déployer (dans un environnement de production)
+## B - Pourquoi utiliser Jenkins Pipeline ?
+Jenkins joue un rôle important dans la fourniture d'applications ou de produits de haute qualité. Nous savons maintenant que Jenkins s'est avéré être utile pour l'intégration continue, des tests continus et de la livraison continue.
+
+Il utilise une fonctionnalité appelée pipeline Jenkins pour la livraison continue, qui est essentiellement la possibilité de publier des applications régulièrement à un intervalle. Ce processus garantit la répétabilité lors de l'intégration et que le logiciel est toujours prêt pour la production.
+
+Avantages du pipeline Jenkins
+Le point culminant du pipeline Jenkins est qu'il offre la fonctionnalité permettant de définir la configuration et le code complets du flux de déploiement. Il indique que tous les travaux Jenkins standard peuvent être écrits manuellement sous la forme d'un script et peuvent être gérés avec un système de contrôle de version.
+
+Il s'agit essentiellement de suivre la discipline du "pipeline as code". Ainsi, au lieu de créer plusieurs tâches pour chaque processus, cela nous permet de coder l'ensemble du flux de travail et de le placer dans un fichier Jenkins.
+
+Vous trouverez ci-dessous quelques-unes des raisons que l'on pourrait envisager avant d'utiliser le pipeline Jenkins pour l'automatisation des tests Jenkins (avec Selenium par exemple) :
+
+En utilisant Groovy DSL (Domain Specific Language), il modélise des pipelines simples à complexes sous forme de code.
+
+Le code est stocké sous la forme d'un fichier texte appelé "Jenkinsfile" qui peut être scanné dans Source Code Management.
+
+Il prend en charge les pipelines complexes en ajoutant des boucles conditionnelles, des fourches ou des opérations de jointure et en autorisant des tâches d'exécution parallèles.
+
+Il améliore l'expérience utilisateur en intégrant les commentaires des utilisateurs dans le pipeline.
+
+Il est résilient en termes de redémarrage non planifié principal de Jenkins.
+
+Il peut reprendre à partir des points de contrôle enregistrés.
+
+Il peut incorporer plusieurs plugins et compléments supplémentaires.
+
+Jenkins Pipeline est une solution d'automatisation qui vous permet de créer des pipelines simples ou complexes (modèles) via le DSL utilisé dans chaque pipeline. Jenkins propose deux manières de développer un pipeline : scripté et déclaratif. Traditionnellement, les tâches Jenkins étaient créées à l'aide de l'interface utilisateur Jenkins, appelées tâches FreeStyle.
+
+Avec Jenkins 2.0, Jenkins a introduit une nouvelle façon de créer des travaux en utilisant la technique appelée pipeline en tant que code (Pipeline as Code). Dans la technique du pipeline en tant que code, les tâches sont créées à l'aide d'un fichier de script contenant les étapes à exécuter par la tâche. Dans Jenkins, ce fichier scripté s'appelle Jenkinsfile.
+
+## C - Jenkinsfile
+### c.1 - Introduction
+Il s'agit d'un fichier texte qui stocke l'ensemble du processus sous forme de code dans notre machine locale. Il peut être examiné dans une plate-forme de gestion de code source (SCM) telle que Git. Il est essentiel car il aide les développeurs à afficher, modifier et tester le code chaque fois que nécessaire.
+
+Le fichier Jenkins est écrit à l'aide du langage spécifique au domaine Groovy et peut être généré à l'aide d'un éditeur de texte ou de l'onglet de configuration de l'instance Jenkins.
+
+Il existe deux types différents dans lesquels le pipeline Jenkins peut être construit :
+
+Syntaxe de pipeline déclarative
+Syntaxe de pipeline scriptée
+Les pipelines déclaratifs sont une fonctionnalité relativement nouvelle qui prend en charge le concept de pipeline de code. Il permet la lecture et l'écriture du code du pipeline. Ce code est écrit dans un fichier Jenkins, qui peut être testé dans un outil tel que Git pour le contrôle de source.
+
+Le pipeline scripté est une méthode typique d'écriture de code. Le fichier Jenkins est écrit sur l'instance d'interface utilisateur Jenkins dans ce pipeline.
+
+Bien que ces deux pipelines soient basés sur Groovy, le pipeline scripté utilise des syntaxes basées sur Groovy plus strictes. En effet, il s'agissait du premier pipeline de fondation groovy créé pour être utilisé. Comme ce script Groovy n'était généralement pas adapté à tous les utilisateurs, il a introduit le pipeline déclaratif pour fournir une syntaxe Groovy plus simple et plus flexible.
+
+Le pipeline déclaratif est défini dans un bloc pipeline, tandis que le pipeline scripté est défini dans un bloc node.
+
+### c.2 - Qu'est-ce que le pipeline scripté Jenkins ?
+Les pipelines Jenkins sont traditionnellement écrits sous forme de pipelines scriptés. Idéalement, le pipeline scripté est stocké dans l'interface utilisateur Web Jenkins en tant que fichier Jenkins. Le script de pipeline scripté de bout en bout est écrit en Groovy :
+
+Il nécessite une connaissance de la programmation Groovy comme prérequis.
+
+Le Jenkinsfile commence par le mot node, rappelions que c'est un node worker qui exécute la charge de travail.
+
+Il peut contenir des constructions de programmation standard comme le bloc if-else, le bloc try-catch, etc.
+
+Un pipeline scripté simple pourrait ressembler à la syntaxe suivante :
+```
+node {
+    stage('Greeting') {
+        steps {
+            echo 'hello Datascientest'
+        }
+    }
+}
+```
+
+### c.3 - Qu'est-ce que le pipeline déclaratif Jenkins ?
+Le sous-système déclaratif de Pipeline dans Jenkins Pipeline est relativement nouveau et fournit une syntaxe simplifiée et opiniâtre en plus des sous-systèmes Pipeline.
+
+Le dernier ajout à la technique de création d'emplois de pipeline Jenkins.
+
+Le pipeline déclaratif Jenkins doit utiliser les constructions prédéfinies pour créer des pipelines. Par conséquent, il n'est pas flexible en tant que pipeline scripté.
+
+Jenkinsfile commence par le mot pipeline.
+```
+pipeline {
+     stages {
+        stage('Greeting') {
+            steps {
+                echo 'hello Datascientest'
+            }
+        }
+    }
+}
+```
+Le pipeline déclaratif Jenkins devrait être le moyen préféré de créer un Job Jenkins car il offre un riche ensemble de fonctionnalités, une courbe d'apprentissage réduite et aucun prérequis pour apprendre un langage de programmation comme Groovy juste pour écrire du code de pipeline.
+
+Nous pouvons également valider la syntaxe du code de pipeline déclaratif avant d'exécuter le Job. Cela permet d'éviter de nombreux problèmes d'exécution avec le script de construction.
+
+## D - Syntaxe déclarative du pipeline Jenkins
+### d.1 - Agent
+Jenkins offre la possibilité d'effectuer des builds distribués en les déléguant à des nœuds "agents". Cela vous permet d'exécuter plusieurs projets avec une seule instance du serveur Jenkins, tandis que la charge de travail est distribuée à ses agents. Les détails sur la configuration d'un mode maître/agent sortent du cadre de ce cours.
+
+Veuillez vous référer aux versions distribuées de Jenkins pour plus d'informations.
+
+Les agents doivent être étiquetés afin qu'ils puissent être facilement identifiés les uns des autres. Par exemple, les nœuds peuvent être étiquetés par leur plate-forme (Linux, Windows, etc.), par leurs versions ou par leur emplacement. La section "agent" configure sur quels nœuds le pipeline peut être exécuté. Spécifier "agent any" signifie que Jenkins exécutera le travail sur n'importe lequel des nœuds disponibles.
+
+Ce mot clé peut être spécifiée au niveau d'un stage, d'une étape (steps) ou au niveau plus global dans tout le Pipeline et désigne les agents utilisés par Jenkins pour exécuter le Job en cours.
+```
+pipeline {
+    agent any // means any agent
+    stages {
+        stage('Greeting') {
+            steps {
+                echo 'Hello Datascientest'
+            }
+        }
+    }
+}
+```
+Afin de prendre en charge la grande variété de cas d'utilisation, la section agent prend en charge quelques types de paramètres différents. Ces paramètres peuvent être appliqués au niveau supérieur du bloc pipeline ou dans chaque directive stage.
+
+* any: Exécute le Pipeline ou l'étape, sur n'importe quel agent disponible.
+* none: Lorsqu'il est appliqué au niveau supérieur du bloc pipeline, aucun agent global ne sera alloué pour l'ensemble de l'exécution du Pipeline et chaque section stage devra contenir sa propre section agent.
+
+* label: Exécute le pipeline, ou l'étape, sur un agent disponible dans l'environnement Jenkins avec l'étiquette fournie.
+
+Exemple : `agent { label 'datascientest1' }`.
+
+Il est également possible de définir plusieurs labels et de faire un "ou" logique : agent { label 'datascientest1 || datascientest2' }.
+Mais aussi un "et" logique : agent { label 'datascientest1 && datascientest2' } en fonction du besoin.
+* node: désigne un nœud spécifique sur lequel nous voulons exécuter notre Job.
+* docker : Exécute le pipeline, ou l'étape, avec le conteneur donné qui sera provisionné dynamiquement.
+```
+agent {
+    docker {
+        image 'gradle:6.9-alpine'
+        label 'datascientest-gradle'
+        args  '-v /tmp:/tmp'
+    }
+}
+```
+
+### d.2 - Environment
+La directive environment spécifie une séquence de paires clé-valeur qui seront définies comme des variables d'environnement pour toutes les étapes, ou des étapes spécifiques à une étape, selon l'emplacement de la directive environment dans le Pipeline. Cette directive peut être définie à la fois au niveau de l'étape ou du pipeline, ce qui déterminera la portée de ses définitions.
+
+Lorsque "environnement" est utilisé au niveau "pipeline", ses définitions seront valides pour toutes les étapes du pipeline. Si, au contraire, il est défini dans une "étape", il ne sera valable que pour l'étape en question.
+
+Cette directive prend en charge une méthode d'assistance spéciale credentials() qui peut être utilisée pour accéder aux informations d'identification prédéfinies par leur identifiant dans l'environnement Jenkins. Pour les informations d'identification de type text secret, la méthode credentials() garantira que la variable d'environnement spécifiée contient le contenu du texte secret.
+
+Pour l'appel des variables dans le code du Jenkinsfile, nous devrons y ajouter le préfixe $ juste avant le nom de la variable.
+```
+// at the pipeline and stage level
+pipeline {
+    agent any
+    environment {
+        nom = 'datascientest'
+    }
+    stages {
+        stage('Example') {
+            environment {
+                AN_ACCESS_KEY = credentials('datascientest-secret')  // variable secret
+            }
+            steps {
+                sh 'print $nom' // variable call
+            }
+        }
+    }
+}
+```
+Au niveau pipeline uniquement :
+```
+pipeline {
+    agent any
+    environment {
+        OUTPUT_PATH = './outputs/'
+    }
+    stages {
+        stage ('build') {
+            ...
+        }
+    ...
+    }
+}
+```
+Ici, environment est utilisé à un niveau d'un stage uniquement :
+```
+pipeline {
+    agent any
+    stages {
+        stage ('build') {
+            environment {
+                OUTPUT_PATH = './outputs/'
+            }
+        ...
+        }
+    ...
+    }
+}
+```
+
+### d.3 - triggers
+La directive triggers définit les manières automatisées de relancer le Pipeline. Pour les pipelines qui sont intégrés à une source telle que GitHub ou Bitbucket, cette directive peut ne pas être nécessaire car l'intégration basée sur les webhooks sera probablement déjà présente.
+
+Actuellement, les deux déclencheurs disponibles sont cron et pollSCM.
+
+* cron: Accepte une chaîne de style cron pour définir un intervalle régulier auquel le Pipeline doit être re-déclenché, par exemple :triggers { cron('H 4/* 0 0 1-5') }
+```
+pipeline {
+    agent any
+    triggers {
+    ////Exécute les jours de la semaine toutes les quatre heures à partir de la minute 0
+cron('0 */4 * * 1-5')
+    }
+    stages {
+        stage('greeting Datascientest') {
+            steps {
+                echo 'Hello Datascientest'
+            }
+        }
+    }
+}
+```
+* pollSCM : Accepte une chaîne de style cron pour définir un intervalle régulier auquel Jenkins doit vérifier les nouvelles modifications de source. Si de nouvelles modifications existent, le Pipeline sera réenclenché.
+```
+pipeline {
+    agent any
+    triggers {
+        //Query the source code repository on weekdays every four hours starting at minute 0
+        pollSCM('0 */4 * * 1-5')
+    }
+    stages {
+    ...
+    }
+}
+```
+* upstream : exécute des jobs si des jobs précédents ont été exécutés avec succès.
+```
+pipeline {
+    agent any
+    triggers {
+        //Execute when either job7 or job10 are successful
+        upstream(upstreamProjects: 'job7, job10', threshold: hudson.model.Result.SUCCESS)
+    }
+    stages {
+       ...
+    }
+}
+```
+
+### d.4 - post
+La section post définit les actions qui seront exécutées à la fin de l'exécution du pipeline. Un certain nombre de blocs de conditions de publication supplémentaires sont pris en charge dans la post section : always, changed, failure, success et unstable.
+
+Ces blocs permettent l'exécution d'étapes à la fin de l'exécution du Pipeline et en fonction de l'état de ce Pipeline.
+
+Conditions :
+* always : Exécuter quel que soit le statut d'achèvement de l'exécution du Pipeline.
+* changed : Exécuter uniquement si l'exécution actuelle du Pipeline a un statut différent de celui du Pipeline précédemment terminé.
+* failure : Ne s'exécute que si le Pipeline actuel a un statut "en échec", généralement indiqué dans l'interface utilisateur Web par une indication rouge.
+* success : Ne s'exécute que si le pipeline actuel a un statut "succès", généralement indiqué dans l'interface utilisateur Web par une indication bleue ou verte.
+* unstable : Ne s'exécute que si le Pipeline actuel a un statut "instable", généralement causé par des échecs de test, des violations de code, etc. Généralement signalé dans l'interface utilisateur Web par une indication jaune.
+```
+pipeline {
+    agent any
+    stages {
+        stage('Greeting') {
+            steps {
+                echo 'Hello Datascientest'
+            }
+        }
+    }
+    post {
+        always {
+            echo 'I will always say Hello Datascientest!'
+        }
+    }
+}
+```
+Les sections de publication peuvent être ajoutées au niveau du pipeline ou sur chaque bloc stage et les phases qui y sont incluses sont exécutées une fois le stage ou le pipeline terminé.
+
+Étant donné que les phrases incluses dans un bloc de publication de pipeline seront exécutées à la fin du script, des tâches de nettoyage ou des notifications, entre autres, peuvent être effectuées ici :
+```
+pipeline {
+    agent any
+    stages {
+        stage('Greeting Datascientest') {
+            steps {
+                // Steps here
+            }
+        }
+    }
+    post {
+        always {
+            echo "Pipeline finished Greeting datascientest"
+            sh "./datascientest-clean.sh"
+        }
+    }
+}
+```
+
+### d.5 - Stages et Stage
+La section stages permet de générer différentes étapes sur le pipeline qui seront visualisées sous la forme de différents segments lors de l'exécution de la tâche.
+![alt text](image-23.png)
+
+
+Jenkins divise graphiquement l'exécution du pipeline en fonction des étapes définies et affiche leur durée et si elle a réussi ou non. La directive stage va dans la section stages et devrait contenir une directive steps, une directive agent facultative ou d'autres directives spécifiques à une étape.
+
+En pratique, tout le travail réel effectué par un Pipeline sera enveloppé dans une ou plusieurs directives stage.
+```
+pipeline {
+    agent any
+    stages {
+        stage ('build') {
+            ...
+        }
+        stage ('test: integration-&-quality') {
+            ...
+        }
+        stage ('test: functional') {
+            ...
+        }
+        stage ('test: load-&-security') {
+            ...
+        }
+        stage ('approval') {
+            ...
+        }
+        stage ('deploy:dev') {
+            ...
+        }
+        stage ('deploy:staging') {
+            ...
+        }
+        stage ('deploy:prod') {
+            ...
+        }
+    }
+}
+```
+
+### d.6 - Steps
+Il s'agit d'une séquence d'une ou plusieurs directives d'étape, la section stages est l'endroit où se situera l'essentiel du job décrit par un Pipeline. Au minimum, il est recommandé de contenir au moins une directive steps pour chaque partie distincte du processus de livraison continue, telle que Build, Test et Deploy.
+```
+pipeline {
+    agent any
+    stages {
+        stage('Love') {
+            steps {
+                echo 'I love Datascientest'
+            }
+        }
+    }
+}
+```
+Pour Linux et MacOS, sh est pris en charge. Si nous voulons enchaîner plusieurs commandes, nous pouvons utiliser sh''' de la façon suivante :
+```
+steps {
+    sh 'echo "I love Datascientest"'
+    sh '''
+    echo "A multiline step"'
+    cd /tests/results
+    ls -lrt
+    '''
+}
+```
+Pour Windows, bat ou powershell peut être utilisé de la façon suivante :
+```
+steps {
+    bat "mvn clean test -Dsuite=SMOKE_TEST -Denvironment=QA"
+    powershell ".\funcional_tests.ps1"
+}
+```
+
+### d.7 - script
+L'étape script prend un bloc de pipeline scripté et l'exécute dans le pipeline déclaratif. Cette étape est utilisée pour ajouter des phrases de pipeline scripté dans une phrase déclarative, offrant ainsi encore plus de fonctionnalités. Cette étape doit être incluse au niveau stage.
+
+Plusieurs fois, des blocs de scripts peuvent être utilisés sur différents projets. Ces blocs vous permettent d'étendre les fonctionnalités de Jenkins et peuvent être implémentés en tant que bibliothèques partagées. Plus d'informations à ce sujet peuvent être trouvées sur les bibliothèques partagées Jenkins.
+
+De plus, les bibliothèques partagées peuvent être importées et utilisées dans le bloc "script", étendant ainsi les fonctionnalités du pipeline.
+```
+pipeline {
+    agent any
+    stages {
+        stage('Test') {
+            steps {
+                echo 'Testing schools'
+                script {
+                    def schools = ['Datascientest', 'DevUniversity']
+                    for (int i = 0; i < schools.size(); ++i) {
+                        echo "Testing the ${schools[i]} school"
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+### d.8 - Input
+La directive input est définie au niveau du stage et fournit la fonctionnalité pour demander une entrée. L'étape sera mise en pause jusqu'à ce qu'un utilisateur la confirme manuellement.
+
+Les options de configuration suivantes peuvent être utilisées pour cette directive :
+
+* message : il s'agit d'une option obligatoire dans laquelle le message à afficher pour l'utilisateur est spécifié.
+* id : identifiant facultatif de l'entrée. Par défaut, le nom "étape" est utilisé.
+* ok : texte facultatif pour le bouton OK.
+* submitter: liste facultative d'utilisateurs ou de noms de groupes externes autorisés à soumettre l'entrée. Par défaut, n'importe quel utilisateur est autorisé.
+* submitterParameter : nom facultatif d'une variable d'environnement à définir avec le nom de l'émetteur, s'il est présent.
+* parameters: liste facultative de paramètres à fournir par le demandeur.
+```
+pipeline {
+    agent any
+    stages {
+        stage ('build') {
+            input{
+                message "Press Ok to continue Datascientest"
+                submitter "user1,user2"
+                parameters {
+                    string(name:'username', defaultValue: 'user', description: 'Username of the user  pressing Ok')
+                }
+            }
+            steps {
+                echo "User: ${username} said Ok."
+            }
+        }
+    }
+}
+```
+
+### d.9 - Parrallel
+Les étapes du pipeline déclaratif Jenkins peuvent avoir d'autres étapes imbriquées à l'intérieur qui seront exécutées en parallèle. Cela se fait en ajoutant la directive parallel à votre script:
+```
+pipeline {
+    agent none
+    stages {
+        stage('Run Tests') {
+            parallel {
+                stage('Test On Windows') {
+                    agent { label "windows" }
+                    steps {
+                        bat "run-tests.bat"
+                      }
+                  }
+                  stage('Test On Linux') {
+                        agent { label "linux" }
+                        steps {
+                            sh "run-tests.sh"
+                    }
+                }
+            }
+        }
+    }
+}
+```
+Nous obtiendrons ceci en termes de résultats :
+![alt text](image-24.png)
+
+
+Les deux scripts exécuteront les tests sur différents nœuds car ils exécutent des tests de plate-forme spécifiques. Le parallélisme peut également être utilisé pour exécuter simultanément des étapes sur le même nœud en utilisant le multithreading, si votre serveur Jenkins dispose de suffisamment de CPU.
+
+Certaines restrictions s'appliquent lors de l'utilisation d'étapes parallèles :
+
+Une directive stage peut avoir soit une directive parallèle, soit une directive d'étapes, mais pas les deux.
+
+Une directive stage à l'intérieur d'une directive parallel ne peut pas imbriquer une autre directive parallel, seules les directives stage sont autorisées.
+
+Les directives d'étape qui ont une directive parallèle à l'intérieur ne peuvent pas avoir de directives "agent" ou "outils" définies.
+
+### d.10 - Parameters
+Cette directive permet de définir une liste de paramètres à utiliser dans le script. Les paramètres doivent être fournis une fois le pipeline déclenché. Il doit être défini au niveau du « pipeline » et une seule directive est autorisée pour l'ensemble du pipeline.
+
+string et boolean sont les types de paramètres valides pouvant être utilisés.
+```
+pipeline {
+    agent any
+    parameters {
+        string(name: 'user', defaultValue: 'John', description: 'A user that triggers the pipeline')
+    }
+    stages {
+        stage('Trigger pipeline') {
+            steps {
+                echo "Pipeline triggered by ${params.user}"
+            }
+        }
+    }
+}
+```
+
+### d.11 - Tools
+La directive tools peut être ajoutée soit au niveau du pipeline, soit à la première étape. Il vous permet de spécifier quelle version maven, jdk ou gradle utiliser sur votre script par exemple si vous vous trouvez sur du code JAVA.
+
+Chacun de ces outils, les trois pris en charge au moment de la rédaction, doit être configuré dans le menu Jenkins Configuration globale de l'outil.
+
+De plus, Jenkins tentera d'installer l'outil répertorié (s'il n'est pas encore installé). En utilisant cette directive, vous pouvez vous assurer qu'une version spécifique requise pour votre projet est installée.
+```
+pipeline {
+    agent any
+    tools {
+        maven 'apache-maven-3.0.6'
+    }
+    stages {
+        ...
+    }
+}
+```
+
+### d.12 - when
+Les étapes du pipeline peuvent être exécutées en fonction des conditions définies dans une directive "quand". Si les conditions correspondent, les étapes définies dans l'étape correspondante seront exécutées. Il doit être défini au niveau de l'étape.
+
+Pour une liste complète des conditions et leurs explications, reportez-vous à la directive when du pipeline déclaratif de Jenkins. Les pipelines permettent d'effectuer des tâches sur des projets comportant plusieurs branches.
+
+C'est ce qu'on appelle les pipelines multibranches, où des actions spécifiques peuvent être entreprises en fonction du nom de la branche, comme master, features, development, entre autres. Nous pouvons écrire un exemple de pipeline qui exécutera les étapes pour la branche master :
+```
+pipeline {
+    agent any
+    stages {
+        stage ('Deploy stage') {
+            when {
+                branch 'master'
+            }
+            steps {
+                echo 'Deploy master to stage'
+                // Add steps for deployment
+            }
+        }
+    }
+}
+```
+Les erreurs de syntaxe des pipelines déclaratifs sont signalées dès le début de l'exécution. C'est une fonctionnalité intéressante car vous ne perdrez pas de temps jusqu'à ce qu'une étape ne réalise pas qu'il y a une faute de frappe ou une faute d'orthographe.
+
+Comme déjà mentionné, les pipelines peuvent être écrits de manière déclarative ou scriptée. En effet, la méthode déclarative est construite au-dessus de la méthode scriptée, ce qui facilite son extension comme expliqué, en ajoutant des étapes de script.
+
+Les pipelines Jenkins sont largement utilisés dans les environnements CI/CD. L'utilisation de pipelines déclaratifs ou scriptés présente plusieurs avantage. La méthode déclarative offre une syntaxe beaucoup plus conviviale sans aucune connaissance Groovy requise.
+
+## E - SED
+L'acronyme SED signifie Stream EDitor, il s'agit d'un utilitaire simple mais puissant qui analyse le texte et le transforme de manière transparente. SED est écrit et maintenu par la Free Software Foundation (FSF) et est distribué par GNU/Linux.
+
+C'est pourquoi il est souvent appelé GNU SED. Nous pourrons résoudre de nombreuses tâches complexes avec quelques lignes de script SED. Nous l'utiliserons surtout pour des raisons de remplacement dans nos pipelines CI/CD afin de modifier les versions de Tag de nos images Docker afin que les constructions courantes prennent en compte de nouveaux tags ou de nouvelles versions construites.
+
+SED peut être invoqué sous les deux formes suivantes :
+```
+sed [-n] [-e] 'commande' 'fichier'
+sed [-n] -f 'fichierdescript' 'fichier'
+```
+La première forme permet de spécifier les commandes en ligne et elles sont entourées de guillemets simples. La dernière permet de spécifier un fichier de script contenant des commandes SED.
+
+Cependant, nous pouvons utiliser les deux formes ensemble plusieurs fois. SED fournit diverses options de ligne de commande pour contrôler son comportement.
+
+Pour installer SED, nous pouvons utiliser notre gestionnaire de paquets APT :
+
+sudo apt-get install sed -y
+Créons à présent un fichier et ajoutons-y du contenu. Notre fichier s'appellera datascientest.txt :
+
+touch datascientest.txt
+Ensuite mettons-y le contenu suivant :
+```
+1) Datascientest permet aux apprenants de rapidement monter en competence
+2) Datascientest forme les apprenants dans tous les domaines de la data et du Devops
+3) La formation chez Datascientest est hybride. Inscrivez vous chez Datascientest !
+4) Datascientest est présente en France, en Espagne, en Allemagne et au Canada
+5) La qualité de la formation chez Datascientest est exceptionnelle
+6) Les apprenants l'apprécient et deviennent rapidement compétents
+```
+Demandez maintenant à SED de ne supprimer que certaines lignes. Ici, pour supprimer trois lignes, nous avons spécifié trois commandes distinctes avec l'option -e.
+```
+sed -e '1d' -e '2d' -e '5d' datascientest.txt
+```
+Affichage en sortie :
+```
+3) La formation chez Datascientest est hybride. Inscrivez vous chez Datascientest !
+4) Datascientest est présente en France, en Espagne, en Allemagne et au Canada
+6) Les apprenants l'apprécient et deviennent rapidement compétents
+```
+De plus, nous pouvons écrire plusieurs commandes SED dans un fichier texte et fournir le fichier texte comme argument à SED. SED peut appliquer chaque commande sur le tampon de modèle. L'exemple suivant illustre la deuxième forme de SED.
+
+Créons un fichier texte contenant les commandes SED. Pour une meilleure compréhension, utilisons les mêmes commandes SED.
+```
+echo -e "1d\n2d\n5d" > sed.txt
+cat sed.txt
+```
+Affichage en sortie :
+```
+1d
+2d
+5d
+```
+Demandons maintenant au SED de lire les commandes du fichier texte. Ici, nous obtenons le même résultat que celui montré dans l'exemple ci-dessus.
+```
+sed -f sed.txt datascientest.txt
+```
+Affichage en sortie :
+```
+3) La formation chez Datascientest est hybride. Inscrivez vous chez Datascientest !
+4) Datascientest est présente en France, en Espagne, en Allemagne et au Canada
+6) Les apprenants l'apprécient et deviennent rapidement compétents
+```
+
+### e.1 Options standards
+SED prend en charge les options standard suivantes :
+
+* -n : impression par défaut du tampon de motifs. Par exemple, la commande SED suivante n'affiche aucune sortie :
+```
+sed -n '' datascientest.txt
+```
+* -e: L'argument suivant est une commande d'édition. Ici, les crochets impliquent un paramètre obligatoire. En utilisant cette option, nous pouvons spécifier plusieurs commandes. Imprimons chaque ligne deux fois grâce à -e 'p':
+```
+sed  -e 'p' datascientest.txt
+```
+Affichage en sortie :
+```
+1) Datascientest permet aux apprenants de rapidement monter en competence
+1) Datascientest permet aux apprenants de rapidement monter en competence
+2) Datascientest forme les apprenants dans tous les domaines de la data et du Devops
+2) Datascientest forme les apprenants dans tous les domaines de la data et du Devops
+3) La formation chez Datascientest est hybride. Inscrivez vous chez Datascientest !
+3) La formation chez Datascientest est hybride. Inscrivez vous chez Datascientest !
+4) Datascientest est présente en France, en Espagne, en Allemagne et au Canada
+4) Datascientest est présente en France, en Espagne, en Allemagne et au Canada
+5) La qualité de la formation chez Datascientest est exceptionnelle
+5) La qualité de la formation chez Datascientest est exceptionnelle
+6) Les apprenants l'apprécient et deviennent rapidement compétents
+6) Les apprenants l'apprécient et deviennent rapidement compétents
+```
+Nous pouvons également afficher les différentes lignes en sautant d'une ligne grâce à -e 'a\ ' :
+```
+sed -e 'a\ ' datascientest.txt
+```
+Affichage en sortie :
+```
+1) Datascientest permet aux apprenants de rapidement monter en competence
+
+2) Datascientest forme les apprenants dans tous les domaines de la data et du Devops
+
+3) La formation chez Datascientest est hybride. Inscrivez vous chez Datascientest !
+
+4) Datascientest est présente en France, en Espagne, en Allemagne et au Canada
+
+5) La qualité de la formation chez Datascientest est exceptionnelle
+
+6) Les apprenants l'apprécient et deviennent rapidement compétents
+```
+
+### e.2 SED : Syntaxe de recherche et de remplacement
+La syntaxe pour rechercher et remplacer du texte à l'aide de la commande sed est :
+```
+sed -i 's/<reqex>/<texte_a_replacer>/g' <fichier>
+```
+La commande se compose des éléments suivants :
+
+* -i indique à la commande SED d'écrire les résultats dans un fichier au lieu de la sortie standard.
+* s indique la commande de remplacement.
+* / est le caractère délimiteur le plus courant. La commande accepte également d'autres caractères comme délimiteurs, ce qui est utile lorsque la chaîne contient des barres obliques.
+* <reqex> est le paramètre de recherche de chaîne ou d'expression régulière.
+* <texte_a_replacer>est le texte de remplacement.
+* g est l'indicateur de remplacement global, qui remplace toutes les occurrences d'une chaîne au lieu de la première uniquement.
+* <fichier> est le fichier sur lequel nous voulons effectuer la recherche et le remplacement.
+
+Les guillemets simples permettent d'éviter l'expansion des métacaractères dans le Shell.
+
+### e.3 Exemple de remplacement de fichiers grâce à SED
+Utilisons le fichier datascientest.txt comme entrée pour tester les commandes suivantes.
+
+Remplacer la première chaîne correspondante
+Pour remplacer la première instance trouvée du mot Datascientest par DevUniversity sur les différentes lignes de notre fichier datascientest.txt, exécutons la commande suivante :
+```
+sed -i 's/Datascientest/Devuniversity/' datascientest.txt
+```
+La balise -i insère les modifications dans le fichier datascientest.txt. Vérifions le contenu du fichier à présent :
+```
+cat datascientest.txt
+```
+Affichage en sortie :
+```
+1) Devuniversity permet aux apprenants de rapidement monter en competence
+2) Devuniversity forme les apprenants dans tous les domaines de la data et du Devops
+3) La formation chez Devuniversity est hybride. Inscrivez vous chez Datascientest !
+4) Devuniversity est présente en France, en Espagne, en Allemagne et au Canada
+5) La qualité de la formation chez Devuniversity est exceptionnelle
+6) Les apprenants l'apprécient et deviennent rapidement compétents
+```
+La commande remplace la première instance de Datascientest par DevUniversity dans chaque ligne, y compris les sous-chaînes. Nous constatons que la ligne 3 contient encore le mot Datascientest car c'est la deuxième fois que le mot apparait dans la ligne.
+
+Remplacement global
+Pour cette partie, remplissons le contenu précédent dans notre fichier datascientest.txt à savoir :
+```
+1) Datascientest permet aux apprenants de rapidement monter en competence
+2) Datascientest forme les apprenants dans tous les domaines de la data et du Devops
+3) La formation chez Datascientest est hybride. Inscrivez vous chez Datascientest !
+4) Datascientest est présente en France, en Espagne, en Allemagne et au Canada
+5) La qualité de la formation chez Datascientest est exceptionnelle
+6) Les apprenants l'apprécient et deviennent rapidement compétents
+```
+Pour remplacer chaque correspondance de chaîne dans l'intégralité de notre fichier, ajoutons l'indicateur g :
+```
+sed -i 's/Datascientest/Devuniversity/g' datascientest.txt
+```
+Affichage en sortie :
+```
+1) Devuniversity permet aux apprenants de rapidement monter en competence
+2) Devuniversity forme les apprenants dans tous les domaines de la data et du Devops
+3) La formation chez Devuniversity est hybride. Inscrivez vous chez Devuniversity !
+4) Devuniversity est présente en France, en Espagne, en Allemagne et au Canada
+5) La qualité de la formation chez Devuniversity est exceptionnelle
+6) Les apprenants l'apprécient et deviennent rapidement compétents
+```
+Vous pourrez retrouver une documentation plus complète sur la commande SED à l'adresse https://www.gnu.org/software/sed/manual/sed.html
