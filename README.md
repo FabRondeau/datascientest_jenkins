@@ -2030,3 +2030,61 @@ Nous pouvons à présent cliquer sur le bouton run afin de voir Blue Ocean en ac
 
 Une fois terminé, nous avons une interface qui nous montre que tout est Ok.
 ![alt text](image-64.png)
+# VII - Créer et gérer des utilisateurs avec Jenkins
+## A - Présentation
+Généralement, dans une grande organisation, il existe plusieurs équipes distinctes pour exécuter et gérer les Job au sein de Jenkins. Mais gérer un nombre important d'utilisateurs et leur attribuer des rôles peut s'avérer fastidieux en termes de gestion.
+
+Par défaut, lorsque nous créons un utilisateur dans Jenkins, celui-ci est administrateur de la plateforme. Dans ce cas, bien que nous puissions créer plusieurs utilisateurs, il n'est pas recommandé de leur attribuer les mêmes rôles et un niveau de privilèges trop élevé, surtout pour les grandes organisations.
+
+Pour nous permettre d'attribuer différents rôles et privilèges à différents utilisateurs dans Jenkins, nous devons installer le plugin Role Strategy.
+
+Dans l'écran d'accueil de Jenkins (tableau de bord Jenkins), cliquons sur l'option Manage Jenkins sur le côté gauche de l'écran.
+![alt text](image-65.png)
+
+Maintenant, cliquons sur Plugins.
+![alt text](image-66.png)
+
+Dans la page suivante, cliquons sur l'onglet Available.
+![alt text](image-67.png)
+
+Dans le champ de recherche, entrons Role-based Authorization Strategy et cochons sur la checkbox afin de sélectionner le plugin Role-based Authorization Strategy:
+![alt text](image-68.png)
+
+Cliquons sur le bouton Install.
+
+## B - Activer la stratégie basée sur les rôles sur Jenkins
+Après l'installation du plugin, allons dans le menu Manage Jenkins puis cliquons sur Security.
+
+Dans la section Security Realm, sélectionnons Jenkins' own user database.
+![alt text](image-69.png)
+
+Dans la section Authorization, sélectionnons role-based strategy. Cliquons à présent sur le bouton save.
+
+Nous sommes défini en tant qu'administrateur automatiquement par le plugin. Pour le vérifier, nous revenons sur notre tableau de bord Jenkins, nous cliquons sur le menu Manage Jenkins et nous cliquons sur le bouton Manage and Assign Roles.
+
+Nous cliquons sur le bouton Assign Roles afin de vérifier le rôle actuel :
+![alt text](image-70.png)
+![alt text](image-71.png)
+
+Nous pouvons donc remarquer que nous avons reçu le rôle d'administrateur.
+
+## C - Créer un utilisateur sur Jenkins
+Il est maintenant temps de configurer nos utilisateurs dans le système. Cliquons sur le menu Manage Jenkins et faisons défiler vers le bas, cliquons sur le menu Manage Users.
+![alt text](image-72.png)
+
+Nous pouvons cliquer sur le bouton create user afin de rajouter un utilisateur.
+![alt text](image-73.png)
+
+Ajoutons un utilisateur appelé developpeur avec les paramètres qui vont bien, un mot de passe fort, un nom complet et une adresse email et cliquons sur le bouton create user:
+![alt text](image-74.png)
+
+C'est fait, nous avons à présent un second utilisateur sur notre système.
+
+## D - Gérer les rôles des utilisateurs sur Jenkins
+Nous allons à présent attribuer des rôles à notre nouvel utilisateur. Revenons sur notre tableau de bord Jenkins, nous cliquons sur le menu Manage Jenkins et nous cliquons sur le bouton Manage and Assign Roles. Nous cliquons sur le bouton Manage Roles afin d'ajouter un nouveau rôle. Sur le champ role to add ajoutons developper et cliquons sur le bouton add.
+
+Nous pouvons à présent définir les droits qu'aura ce groupe. Donnons à ce groupe les droits read, create, view et update et cliquons sur le bouton save :
+![alt text](image-75.png)
+
+Une fois ces actions terminées, nous pouvons créer la relation entre notre utilisateur et notre nouveau rôle. Nous restons sur le menu Manage and Assign Roles et nous choisissons le menu assign roles. Une fois que nous y sommes, nous pouvons remplir le nom de notre utilisateur sur le champ user/group to add définir le rôle auquel il appartient en cliquant sur la case à cocher du rôle que nous voulons assigner.
+![alt text](image-76.png)
