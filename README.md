@@ -272,3 +272,244 @@ Cliquons sur commencer à utiliser Jenkins. Nous serons alors redirigés vers l'
 ![alt text](image-8.png)
 
 À gauche se trouve le menu principal permettant d'accéder aux différentes fonctionnalités de Jenkins comme la création de projets, la consultation de l'historique. Nous avons également en haut à droite la configuration de Jenkins.
+# III - Configuration de GitHub pour Jenkins
+
+## A - Installation du plugin Github Integration
+Jenkins est un serveur CI (intégration continue), ce qui signifie qu'il doit extraire le code source d'un référentiel de code source pour créer un projet. Jenkins offre un excellent support pour divers systèmes de gestion de code source tels que Subversion, CVS, etc.
+
+Github est un référentiel de code basé sur le Web qui joue un rôle majeur dans le DevOps. GitHub fournit une plate-forme commune à de nombreux développeurs travaillant sur le même code ou projet pour télécharger et récupérer le code mis à jour, facilitant ainsi l'intégration continue. Jenkins travaille avec Git via le plugin Git.
+
+Cependant, connecter un référentiel privé GitHub à une instance privée de Jenkins peut s'avérer délicat.
+
+Pour effectuer la configuration de GitHub, assurons-nous que la connectivité Internet est présente sur la machine sur laquelle Jenkins est installé.
+
+Dans l'écran d'accueil de Jenkins (tableau de bord Jenkins), cliquons sur l'onglet à gauche Manage Jenkins.
+![alt text](image-9.png)
+
+À présent, cliquons sur Manage plugins. Nous remarquons plusieurs onglets, mais nous allons nous intéresser à l'onglet Plugins. Il s'agit d'une fonctionnalité de Jenkins qui permet d'améliorer son usage.
+Il y a plus de 1800 plugins pour Jenkins, parmi ceux-ci, on peut notamment citer les intégrations avec les différents systèmes de contrôle de version (Git, Mercurial, SVN), Kubernetes, Docker et même des services de Cloud Computing (AWS, Azure, GCP).
+![alt text](image-10.png)
+
+
+Dans la page suivante, cliquons sur l'onglet Available. Les plugins sont regroupés dans 4 onglets :
+
+* Mises à jour/Updated qui liste les plugins installés pour lesquels des mises à jour sont disponibles.
+* Disponibles/Available qui permet de chercher et d'installer les plugins dont nous avons besoin.
+* Installés/Installed qui liste l'ensemble des plugins que nous avons installés.
+* Avancé/Advanced qui est une interface plus complexe pour installer des plugins manuellement.
+
+Jenkins fourni également un site qui liste les différents plugins existants, sur lequel nous pourrons trouver une documentation plus détaillée.
+![alt text](image-11.png)
+
+L'onglet Available nous donne une liste des plugins disponibles au téléchargement. Dans le champ de recherche, entrons github integration et cochons sur la checkbox afin de sélectionner le plugin github integration:
+![alt text](image-12.png)
+
+Cliquons sur "install". Le téléchargement du plug-in prendra un certain temps en fonction de notre connexion Internet et sera installé automatiquement.
+![alt text](image-13.png)
+![alt text](image-14.png)
+
+
+Une fois terminé, le plugin sera disponible en option lors de la configuration des jobs.
+![alt text](image-15.png)
+
+
+Faisons de même avec le plugin "Pipeline: Stage View" qui est un plugin nous rajoutant un visuel supplémentaire sur les exécutions de pipeline qui nous sera utile pour la suite :
+![alt text](image-16.png)
+
+
+## B - Intégration de Jenkins avec GitHub
+### b.1 - Création du dépôt Github
+Nous parlerons à présent du processus d'intégration de GitHub à Jenkins. Nous commencerons par créer un nouveau dépôt sur notre compte Github, si vous n'en avez pas, vous pouvez en créer un à l'adresse de GitHub.
+
+Nous allons donc créer un dépôt afin de pouvoir versionner notre code source et le connecter à Jenkins. Allons sur Github créer un nouveau dépôt appelé Jenkins-datascientest, avec une visibilité public:
+![alt text](image-17.png)
+
+
+Nous pouvons à présent créer notre dépôt en cliquant sur le bouton Create repository. Une fois sur l'interface de dépôt, nous pouvons aller sur les réglages du dépôt en cliquant sur settings.
+![alt text](image-18.png)
+
+
+### b.2 - Qu'est-ce qu'un webhook ?
+Les Webhooks sont des notifications déclenchées par des événements. Dans la plupart des cas, ils sont utilisés pour la communication entre les systèmes. C'est le moyen le plus simple de recevoir une alerte lorsqu'un évènement (tentative de connexion, mise à jour...) se passe dans un autre système.
+
+Comment fonctionnent les Webhooks ?
+
+Lorsque nous effectuons un retrait à l'aide d'un guichet automatique, la machine vérifie notre solde et nous donne le montant que nous avons demandé. Une fois cette opération effectuée, notre solde est mis à jour et ce changement déclenche une action. Ensuite, un SMS est envoyé avec les détails du retrait.
+
+C'est ainsi que fonctionnent les Webhooks. Une action sert de déclencheur à une autre action. Le reste est une architecture populaire utilisée pour communiquer entre les systèmes. Un cas d'utilisation populaire consiste à connecter des services Web tels que GitHub et Slack.
+
+Un Webhook est une requête HTTP qui transfère des données lorsqu'elle est déclenchée par un événement et transporte un message vers une destination telle qu'un SMS ou une alerte d'appel téléphonique.
+
+Les Webhooks sont utilisés pour les notifications en temps réel, afin que votre système puisse être mis à jour dès que l'événement a lieu. Ce système est très utilisé dans le DevOps afin d'avoir un suivi granulaire de nos systèmes.
+
+En termes plus techniques, la plupart des Webhooks sont configurés en tant que points de rappel HTTP définis par l'utilisateur. Ils nous permettent d'enregistrer une URL http:// ou https:// où les données d'événements peuvent être stockées aux formats JSON ou XML.
+
+Nous pourrons faire ce que nous voulons avec les données que nous récupérons et stockons à partir d'un certain événement.
+
+La mécanique de base des Webhooks consiste à envoyer une requête HTTP à l'URL spécifiée par l'utilisateur, ensuite, un webhook effectue un callback HTTP vers une URL qui doit être configurée par le système qui reçoit les données.
+
+Cette URL de webhook est appelée point de terminaison de webhook. Les points de terminaison Webhook doivent être publics pour être accessibles, et il est important que cette URL appartienne au système récepteur. Le rappel est déclenché chaque fois qu'il y a un événement dont vous souhaitez informer un autre système.
+
+Nous allons donc le mettre en place sur Github afin d'alerter notre instance de Jenkins.
+
+Nous pouvons à présent cliquer sur webhooks.
+![alt text](image-19.png)
+
+
+Nous pouvons cliquer sur Add Webhook.
+![alt text](image-20.png)
+
+
+Dans le formulaire, nous devons remplir le champ Payload URL. Nous allons donc remplir ce champ avec la combinaison suivante :
+
+Votre url Jenkins : http://votreadesseip:8080/
+L'endpoint github-webhook
+Le contenu complet sera donc http://votreadesseip:8080/github-webhook/. Vous devrez remplacer votreadresseip par l'adresse IP de votre serveur.
+
+Pour le champ Content type, nous choisirons application/json.
+![alt text](image-21.png)
+
+
+À présent, nous devons configurer les évènements qui alerteront Jenkins et déclencheront nos jobs de construction.
+
+Sur la partie Which events would you like to trigger this webhook?, nous choisirons Let me select individual events afin de choisir nous-même les évènements déclencheurs.
+
+Nous cocherons les cases suivantes :
+
+Branch or tag creation
+
+Branch or tag deletion
+
+Packages
+
+Pull request review comments
+
+Pull requests
+
+Pull request reviews
+
+Pushes
+
+Registry packages
+
+Une fois toutes ces cases cochées, nous pouvons enregistrer notre Webhook en cliquant sur le bouton Add Webhook.
+
+
+
+Kubernetes et Docker doivent être installés sur votre machine Jenkins DataScientest, les étapes "c" et "d" vous donnent les commandes pour reproduire l'environnement sur votre machine personnelle
+
+Vous pouvez le vérifier avec les commandes suivantes :
+```
+k3s kubectl get nodes
+```
+Nous devons ensuite ajouter l'utilisateur Jenkins au groupe Docker afin que Jenkins puisse piloter le Docker engine :
+```
+sudo usermod -aG docker jenkins
+```
+Nous créerons ensuite les Namespaces dans lesquelles nous ferons nos déploiements au sein de Kubernetes depuis Jenkins. Nous allons en créer 03, dev, staging et prod :
+```
+sudo chmod 755 /etc/rancher/k3s/k3s.yaml
+kubectl create namespace dev
+kubectl create namespace staging
+kubectl create namespace prod
+```
+Si vous utilisez la machine Jenkins de DataScientest et que les commandes ci-dessus fonctionnent, rendez-vous à la section "e - Docker Hub"
+
+
+## C - Installation de Kubernetes
+La mise en œuvre d'un pipeline CI/CD avec les fonctionnalités d'automatisation de Kubernetes présente de nombreux avantages. Les développeurs peuvent facilement corriger les mises à jour, résoudre les problèmes de panne en cas de pic de trafic imprévu et améliorer l'efficacité des ressources.
+
+Kubernetes devenant de plus en plus populaire de jour en jour, tous les fournisseurs d'outils CI/CD matures développent de nouvelles fonctionnalités à intégrer à Kubernetes. Lorsque nous recherchons un outil de pipeline CI/CD Kubernetes, il est essentiel de déterminer des facteurs tels que le type de déploiement (options sur site ou dans le cloud), la facilité d'utilisation et la prise en charge de différents systèmes d'exploitation.
+
+En ce qui concerne la facilité d'utilisation et la mise en œuvre d'une pratique DevOps unique, Jenkins est l'un des meilleurs paris si nous avons besoin d'une intégration et d'une prise en charge avancées pour différentes plates-formes.
+
+Nous utiliserons une version extrêmement légère de Kubernetes appelé k3s dans ce cours. K3s est une distribution Kubernetes développée par Rancher.
+
+En tant que version allégée de Kubernetes, K3s consomme moins de ressources que les distributions traditionnelles, ce qui lui permet de bien fonctionner sur de petites machines individuelles telles que des ordinateurs portables ou des ordinateurs de bureau. K3s est également plus facile que les autres distributions Kubernetes à configurer et à gérer à bien des égards.
+
+Sa capacité à fonctionner sur pratiquement n’importe quel appareil et son processus simple (suffisamment pour fonctionner sur une Raspberry Pi) rendent K3s pratique pour ceux qui découvrent Kubernetes et souhaitent le tester.
+
+Cela dit, K3s n'est pas seulement destiné aux tests et à l'expérimentation. Il peut également servir de distribution Kubernetes prête pour la production qui peut évoluer pour fonctionner sur de grands réseaux d'appareils. Rancher promeut K3s en tant qu'option Kubernetes pour les infrastructures IoT et de périphérie en raison de ses faibles besoins en ressources, ainsi que de sa prise en charge des appareils ARM64 et ARMv7.
+
+Kubernetes est déjà installé sur les machines virtuelles fournies, cette section sert pour ceux qui utilisent leurs ordinateurs personnels. Vous pouvez le vérifier avec la commande sudo kubectl version
+Nous pouvons tout installer avec la commande suivante :
+```
+curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
+```
+Nous pouvons à présent vérifier l’installation de Kubernetes :
+```
+sudo kubectl version
+```
+Affichage en sortie :
+```
+Client Version: v1.25.4+k3s1
+Kustomize Version: v4.5.7
+Server Version: v1.25.4+k3s1
+```
+Nous parlerons de Kustomize dans la suite de ce cours.
+
+K3s nous fournit un nœud sur lequel nous avons l’ensemble des composants d’un cluster, c’est une installation "tout-en-un" sur laquelle nous avons un master et worker en une seule instance.
+
+Pour effectuer cette vérification, nous pouvons exécuter la commande suivante :
+```
+k3s kubectl get nodes
+```
+Kubernetes s'est considérablement développé, tout comme l'écosystème qui le soutient. Récemment, Helm a reçu le statut de diplômé de la Cloud Native Computing Foundation (CNCF), ce qui montre sa popularité croissante parmi les utilisateurs. Nous allons l'installer sur notre cluster Kubernetes grâce aux commandes suivantes :
+```
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+```
+
+![alt text](image-22.png)
+## D - Installation de Docker
+Docker est une plate-forme parfaitement adaptée à l'écosystème DevOps. C'est une solution appropriée pour les éditeurs de logiciels qui ne peuvent pas suivre le rythme de l'évolution de la technologie, des activités et des besoins des clients. Cela fait de Docker un choix évident pour développer et accélérer les opérations dans une entreprise.
+
+La raison du succès de Docker dans l'environnement DevOps est sa capacité à conteneuriser les applications. Cela réduit le temps de développement et de publication d'une solution pour une société de développement de logiciels.
+
+Il est utile pour surmonter les défis de l'environnement "Dev" et "Ops". Il permet à une application de s'exécuter sur n'importe quelle application, quelles que soient les configurations d'hôte. Cela permet à toutes les équipes de collaborer tout en travaillant efficacement.
+
+Docker nous permet de rationaliser et de contrôler les modifications tout au long du cycle de développement. Nous pouvons l'utiliser tout au long des étapes de développement, de production et de publication. Si nous souhaitons revenir à une version précédente, vous pouvez le faire en utilisant Docker.
+
+Nous pouvons également nous assurer qu'une fonctionnalité fonctionne dans l'environnement de production selon qu'elle est opérationnelle ou non dans l'environnement de développement.
+
+Docker est déjà installé sur les machines virtuelles fournies, cette section sert pour ceux qui utilisent leurs ordinateurs personnels. Vous pouvez le vérifier avec la commande docker -v
+Nous allons installer Docker à fin que Jenkins puisse être utilisé pour manipuler nos différentes images Docker. Nous installerons Docker en nous servant des commandes suivantes :
+```
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+# Add the repository to Apt sources:
+echo   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl enable --now docker
+```
+Nous devons ensuite ajouter l'utilisateur Jenkins au groupe Docker afin que Jenkins puisse piloter le Docker engine.
+
+Nous le ferons de la façon suivante :
+```
+sudo usermod -aG docker jenkins
+```
+
+## E - Docker Hub
+Docker Hub est un registre Docker, une version hébergée dans le cloud, une application côté serveur open-source, évolutive et sans état.
+
+Il peut gérer le partage et le stockage des images Docker. À l'aide de Docker, les développeurs peuvent y accéder en tant que public et créer leur propre espace de référentiels privés et automatiser les fonctions personnalisées de création d'applications, les groupes de travail et les webhooks.
+
+Un développeur formé aux pratiques DevOps peut télécharger l'image officielle du conteneur du système de base de données orienté document MongoDB depuis Docker Hub pour s'entraîner sur une application déployée dans les conteneurs par exemple.
+
+### e.1 - Fonctionnalités du hub Docker
+* Référentiels : il contient le processus Push et Pull pour les images de conteneurs.
+* Équipes et organisations : il permet au développeur/utilisateur d'accéder à des référentiels privés d'images de conteneurs.
+* Images officielles de Docker : il extrait et utilise des images de conteneurs de haute qualité rendues par Docker.
+* Images d'éditeur vérifiées par Docker : il extrait et utilise des images de conteneurs de haute qualité rendues par des fournisseurs externes.
+* Builds : il fournit les mécanismes qui formulent automatiquement des images de conteneur à partir de Bitbucket et GitHub et les poussent vers Docker Hub.
+* Webhooks : il déclenche certaines actions après une poussée réussie vers un conteneur pour combiner Docker Hub avec des services supplémentaires.
+
+Docker implémente un outil Docker Hub CLI qui est actuellement expérimental et une API (Micro-service) qui nous permet de communiquer avec Docker Hub. Nous pouvons parcourir la documentation de l'API Docker Hub pour rechercher les points de terminaison entre accolades.
+
+Vous pouvez créer un compte Dockerhub à l'adresse suivante : https://hub.docker.com/signup. Nous nous en servirons dans la suite de notre cours.
