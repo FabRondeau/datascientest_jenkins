@@ -1,3 +1,4 @@
+![alt text](image.png)
 # Objectif Pédagogique
 Cette formation sur Jenkins vise à doter les participants des compétences nécessaires pour installer, configurer et gérer des pipelines CI/CD avec Jenkins. L'approche de cette formation inclut l'intégration d'outils clés tels que Jenkins, Docker et Kubernetes, formant ainsi une chaîne complète d'intégration et de déploiement continus.
 
@@ -112,6 +113,7 @@ Il ressort clairement des problèmes mentionnés ci-dessus que non seulement le 
 Donc, pour corriger ce problème, il était nécessaire d'avoir un système où les développeurs peuvent déclencher en permanence une construction et tester chaque modification apportée au code source.
 
 Jenkins permettra donc de résoudre ce problème. Jenkins est un outil d'intégration continue très mature, alors voyons comment l'intégration continue avec Jenkins a surmonté les lacunes ci-dessus.
+![alt text](image-1.png)
 
 Tout d'abord, un développeur valide le code dans le référentiel de code source. Pendant ce temps, le Jenkins vérifie le référentiel à intervalles réguliers pour les changements.
 
@@ -123,6 +125,7 @@ Si la construction réussit, le serveur Jenkins déploie la construction dans le
 Après les tests, le serveur Jenkins génère un retour d'information, puis informe les développeurs des résultats de la construction et des tests.
 
 Il continuera à vérifier le référentiel de code source pour les modifications apportées au code source et l'ensemble du processus se répète.
+![alt text](image-2.png)
 
 La publication (release) d'un logiciel passe par de nombreuses étapes. La première étape est bien sûr de développer le logiciel en question, ou les nouvelles fonctionnalités. Il faut ensuite souvent passer par une étape de build, qui permet de créer une version exécutable du logiciel à partir du code source. Après le build, des tests sont réalisés. En cas de succès, le logiciel est publié ou déployé.
 
@@ -162,6 +165,7 @@ L'architecture Jenkins comporte deux composants :
 
 Jenkins Master
 Jenkins Worker
+![alt text](image-3.png)
 
 
 ### f.1 - Jenkins Master
@@ -185,3 +189,86 @@ Une instance maître/serveur de Jenkins peut également exécuter directement de
 Le Jenkins Worker est utilisé pour exécuter les tâches de build envoyées par le Master. Nous pouvons configurer un projet pour qu'il s'exécute toujours sur une machine esclave particulière, ou un type particulier de machine esclave, ou simplement laisser Jenkins choisir le prochain esclave (nœud) disponible.
 
 Comme nous le savons, Jenkins est développé à l'aide de Java et est indépendant de la plate-forme utilisée. Ainsi, les Jenkins Master et Worker peuvent être configurés sur n'importe quel serveur, y compris Linux, Windows et Mac.
+
+# II - Installation et configuration de Jenkins
+## A - Installation de Jenkins
+Jenkins est disponible à partir des référentiels Ubuntu et peut être installé directement à l'aide du gestionnaire de packages APT. Nous avons vu que Jenkins est développé en JAVA. Pour vérifier que Java est installé sur notre système, exécutons la commande :
+```
+java --version
+```
+Vérifions que Jenkins est bien installé sur notre système et que le service est actif :
+```
+sudo systemctl status jenkins
+```
+Vous devriez constater que Jenkins est bien en mode "running". Toutefois, nous vous avons préparé les prochaines étapes pour reproduire l'installation sur votre machine.
+### a.1 - Jenkins Master
+Puisque Jenkins est basé sur Java, nous devons installer OpenJDK. Pour cela, exécutons la commande :
+```
+sudo apt update
+sudo apt install fontconfig openjdk-17-jre -y
+```
+Mettre à jour notre machine. Il est recommandé de toujours mettre à jour les packages système.
+
+Exécutons donc la commande :
+```
+sudo apt update -y
+```
+Exécutons ensuite :
+```
+sudo apt upgrade -y
+```
+Installons à présent Jenkins. Nous ajoutons la clé du référentiel Jenkins à notre système :
+```
+sudo wget -O /etc/apt/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install jenkins -y
+```
+Jenkins est démarré lors de l'installation sur notre serveur. Nous pourrons confirmer qu'il est en cours d'exécution en exécutant la commande :
+```
+sudo systemctl status jenkins
+```
+À partir de la sortie, nous pouvons voir que Jenkins est opérationnel.
+
+Si Jenkins n'est pas démarré, exécutons la commande ci-dessous pour qu'il soit opérationnel et que le service Jenkins soit activé au démarrage :
+```
+sudo systemctl enable --now jenkins
+```
+Jenkins démarrera désormais chaque fois que nous redémarrons ou allumons notre serveur.
+
+## B - Configuration de Jenkins
+
+Connectons-nous au serveur Jenkins à l'aide de notre navigateur, par défaut l'adresse est http://adresseip:8080/, mais si vous êtes sur la machine virtuelle, le port a été changé de 8080 à 9000 pour éviter les conflits, adresseip étant l'adresse IP de votre machine Datascientest, si vous utilisez votre propre machine vous pouvez aller sur localhost.
+L'interface Web Jenkins utilise la langue configurée par défaut sur le navigateur du client. Vous pouvez changer ce paramètre à tout moment. Pour simplifier la gestion de nos exercices, nous avons choisi de paramétrer notre navigateur en Anglais.
+Nous obtiendrons la première page qui est l'écran "Déverrouiller Jenkins". Afin de configurer Jenkins en toute sécurité, nous devrons coller le mot de passe de l'administrateur.
+
+Nous exécuterons la commande suivante afin de révéler le mot de passe :
+```
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+```
+Affichage en sortie :
+```
+943eb6a8472b4e929945a5cb65745f24
+```
+Copions et collons le mot de passe dans le champ de texte « Administrator Password », comme indiqué. Une fois collé, cliquons sur le bouton « Continuer »:
+![alt text](image-4.png)
+
+Une fois que nous avons recopié le mot de passe généré, nous arriverons sur la page suivante :
+![alt text](image-5.png)
+
+Sélectionnons le bouton « Install suggested plugin »,
+![alt text](image-6.png)
+
+Puis remplissons le formulaire avec les informations requises.
+
+L'écran suivant configure la connexion administrateur, remplissons les informations souhaitées :
+![alt text](image-7.png)
+
+Vient ensuite la configuration de l'instance de votre URL Jenkins. Nous pouvons laisser la configuration par défaut.
+Cliquons sur commencer à utiliser Jenkins. Nous serons alors redirigés vers l'interface Jenkins :
+![alt text](image-8.png)
+
+À gauche se trouve le menu principal permettant d'accéder aux différentes fonctionnalités de Jenkins comme la création de projets, la consultation de l'historique. Nous avons également en haut à droite la configuration de Jenkins.
