@@ -1984,3 +1984,49 @@ vérifions à présent notre application sur le port 31377 de notre serveur :
 ![alt text](image-55.png)
 
 Nous avons mis en place notre pipeline CI/CD avec Jenkins de bout en bout. Et à présent, à chaque changement de code, Jenkins pourra redéployer notre code jusqu'en environnement de staging et ne pourra déployer en production qu'après notre validation manuelle. Nous avons donc mis en place un cas de Livraison Continue avec Jenkins.
+# VI - Jenkins Blue Ocean
+## A - Introduction
+Blue Ocean est un plugin de Jenkins qui simplifie le développement des pipelines de logiciels en permettant aux développeurs de créer des pipelines avec éditeur visuel, puis visualiser le flux de processus de manière intuitive, de sorte que toute l'organisation et pas seulement les développeurs puisse le comprendre.
+
+Pour cela, la nouvelle expérience utilisateur apportée par Blue Ocean est basée sur un design personnalisé et moderne et est créé sur la base de l'expérience utilisateur de Jenkins. Il est principalement conçu pour le processus de pipeline et permet de réduire le désordre causé par des multiples pipelines Jenkins et augmente également la clarté pour chaque membre de l'équipe.
+
+## B - Principales caractéristiques de Blue Ocean
+Personnalisation : Blue Ocean fonctionne de manière personnalisée. Chaque membre de l'équipe peut facilement visualiser l'exécution et les modifications apportées aux builds.
+
+Précision précise : chaque fois qu'un problème survient ou qu'une interférence est nécessaire dans le processus de pipeline, Blue Ocean indique l'emplacement exact où le bogue est apparu et où vous pouvez faire attention dans le pipeline.
+
+Éditeur de pipeline : Blue Ocean facilite la création d'un pipeline en donnant des conseils à l'utilisateur via des instructions et une représentation visuelle.
+
+Open source : Blue Ocean est open source ; vous êtes en mesure d'apporter des modifications selon vos besoins.
+
+Gratuit : Blue Ocean est totalement gratuit. Il s'agit d'un plugin dans Jenkins et vous pouvez le télécharger à partir de la section Gérer Jenkins.
+
+## C - Installation de Blue Ocean
+Pour installer le Blue Ocean dans le Jenkins, nous devons utiliser la version Jenkins 2.7.x ou ultérieure.
+
+Dans l'écran d'accueil de Jenkins (tableau de bord Jenkins), cliquons sur l'option Manage Jenkins sur le côté gauche de l'écran.
+![alt text](image-56.png)
+
+Maintenant, cliquons sur Plugins.
+![alt text](image-57.png)
+
+Dans la page suivante, cliquons sur l'onglet Available.
+![alt text](image-58.png)
+
+Dans le champ de recherche, entrons Blue Ocean et cochons sur la checkbox afin de sélectionner le plugin Blue Ocean et cliquons sur le bouton install:
+![alt text](image-59.png)
+
+Une fois l'installation terminée, nous pouvons revenir sur le tableau de bord Jenkins. Nous retrouvons un menu open blue ocean sur le menu de gauche de Jenkins.
+![alt text](image-60.png)
+
+Nous arrivons sur l'interface de Blue Ocean.
+![alt text](image-61.png)
+
+Nous cliquons sur notre projet datascientest-ci-cd.
+![alt text](image-62.png)
+
+Nous pouvons à présent cliquer sur le bouton run afin de voir Blue Ocean en action.
+![alt text](image-63.png)
+
+Une fois terminé, nous avons une interface qui nous montre que tout est Ok.
+![alt text](image-64.png)
