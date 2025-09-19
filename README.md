@@ -1,4 +1,4 @@
-![alt text](image.png)
+![alt text](readme_images/image.png)
 # Objectif Pédagogique
 Cette formation sur Jenkins vise à doter les participants des compétences nécessaires pour installer, configurer et gérer des pipelines CI/CD avec Jenkins. L'approche de cette formation inclut l'intégration d'outils clés tels que Jenkins, Docker et Kubernetes, formant ainsi une chaîne complète d'intégration et de déploiement continus.
 
@@ -113,7 +113,7 @@ Il ressort clairement des problèmes mentionnés ci-dessus que non seulement le 
 Donc, pour corriger ce problème, il était nécessaire d'avoir un système où les développeurs peuvent déclencher en permanence une construction et tester chaque modification apportée au code source.
 
 Jenkins permettra donc de résoudre ce problème. Jenkins est un outil d'intégration continue très mature, alors voyons comment l'intégration continue avec Jenkins a surmonté les lacunes ci-dessus.
-![alt text](image-1.png)
+![alt text](readme_images/image-1.png)
 
 Tout d'abord, un développeur valide le code dans le référentiel de code source. Pendant ce temps, le Jenkins vérifie le référentiel à intervalles réguliers pour les changements.
 
@@ -125,7 +125,7 @@ Si la construction réussit, le serveur Jenkins déploie la construction dans le
 Après les tests, le serveur Jenkins génère un retour d'information, puis informe les développeurs des résultats de la construction et des tests.
 
 Il continuera à vérifier le référentiel de code source pour les modifications apportées au code source et l'ensemble du processus se répète.
-![alt text](image-2.png)
+![alt text](readme_images/image-2.png)
 
 La publication (release) d'un logiciel passe par de nombreuses étapes. La première étape est bien sûr de développer le logiciel en question, ou les nouvelles fonctionnalités. Il faut ensuite souvent passer par une étape de build, qui permet de créer une version exécutable du logiciel à partir du code source. Après le build, des tests sont réalisés. En cas de succès, le logiciel est publié ou déployé.
 
@@ -165,7 +165,7 @@ L'architecture Jenkins comporte deux composants :
 
 Jenkins Master
 Jenkins Worker
-![alt text](image-3.png)
+![alt text](readme_images/image-3.png)
 
 
 ### f.1 - Jenkins Master
@@ -254,22 +254,22 @@ Affichage en sortie :
 943eb6a8472b4e929945a5cb65745f24
 ```
 Copions et collons le mot de passe dans le champ de texte « Administrator Password », comme indiqué. Une fois collé, cliquons sur le bouton « Continuer »:
-![alt text](image-4.png)
+![alt text](readme_images/image-4.png)
 
 Une fois que nous avons recopié le mot de passe généré, nous arriverons sur la page suivante :
-![alt text](image-5.png)
+![alt text](readme_images/image-5.png)
 
 Sélectionnons le bouton « Install suggested plugin »,
-![alt text](image-6.png)
+![alt text](readme_images/image-6.png)
 
 Puis remplissons le formulaire avec les informations requises.
 
 L'écran suivant configure la connexion administrateur, remplissons les informations souhaitées :
-![alt text](image-7.png)
+![alt text](readme_images/image-7.png)
 
 Vient ensuite la configuration de l'instance de votre URL Jenkins. Nous pouvons laisser la configuration par défaut.
 Cliquons sur commencer à utiliser Jenkins. Nous serons alors redirigés vers l'interface Jenkins :
-![alt text](image-8.png)
+![alt text](readme_images/image-8.png)
 
 À gauche se trouve le menu principal permettant d'accéder aux différentes fonctionnalités de Jenkins comme la création de projets, la consultation de l'historique. Nous avons également en haut à droite la configuration de Jenkins.
 # III - Configuration de GitHub pour Jenkins
@@ -284,11 +284,11 @@ Cependant, connecter un référentiel privé GitHub à une instance privée de J
 Pour effectuer la configuration de GitHub, assurons-nous que la connectivité Internet est présente sur la machine sur laquelle Jenkins est installé.
 
 Dans l'écran d'accueil de Jenkins (tableau de bord Jenkins), cliquons sur l'onglet à gauche Manage Jenkins.
-![alt text](image-9.png)
+![alt text](readme_images/image-9.png)
 
 À présent, cliquons sur Manage plugins. Nous remarquons plusieurs onglets, mais nous allons nous intéresser à l'onglet Plugins. Il s'agit d'une fonctionnalité de Jenkins qui permet d'améliorer son usage.
 Il y a plus de 1800 plugins pour Jenkins, parmi ceux-ci, on peut notamment citer les intégrations avec les différents systèmes de contrôle de version (Git, Mercurial, SVN), Kubernetes, Docker et même des services de Cloud Computing (AWS, Azure, GCP).
-![alt text](image-10.png)
+![alt text](readme_images/image-10.png)
 
 
 Dans la page suivante, cliquons sur l'onglet Available. Les plugins sont regroupés dans 4 onglets :
@@ -299,22 +299,22 @@ Dans la page suivante, cliquons sur l'onglet Available. Les plugins sont regroup
 * Avancé/Advanced qui est une interface plus complexe pour installer des plugins manuellement.
 
 Jenkins fourni également un site qui liste les différents plugins existants, sur lequel nous pourrons trouver une documentation plus détaillée.
-![alt text](image-11.png)
+![alt text](readme_images/image-11.png)
 
 L'onglet Available nous donne une liste des plugins disponibles au téléchargement. Dans le champ de recherche, entrons github integration et cochons sur la checkbox afin de sélectionner le plugin github integration:
-![alt text](image-12.png)
+![alt text](readme_images/image-12.png)
 
 Cliquons sur "install". Le téléchargement du plug-in prendra un certain temps en fonction de notre connexion Internet et sera installé automatiquement.
-![alt text](image-13.png)
-![alt text](image-14.png)
+![alt text](readme_images/image-13.png)
+![alt text](readme_images/image-14.png)
 
 
 Une fois terminé, le plugin sera disponible en option lors de la configuration des jobs.
-![alt text](image-15.png)
+![alt text](readme_images/image-15.png)
 
 
 Faisons de même avec le plugin "Pipeline: Stage View" qui est un plugin nous rajoutant un visuel supplémentaire sur les exécutions de pipeline qui nous sera utile pour la suite :
-![alt text](image-16.png)
+![alt text](readme_images/image-16.png)
 
 
 ## B - Intégration de Jenkins avec GitHub
@@ -322,11 +322,11 @@ Faisons de même avec le plugin "Pipeline: Stage View" qui est un plugin nous ra
 Nous parlerons à présent du processus d'intégration de GitHub à Jenkins. Nous commencerons par créer un nouveau dépôt sur notre compte Github, si vous n'en avez pas, vous pouvez en créer un à l'adresse de GitHub.
 
 Nous allons donc créer un dépôt afin de pouvoir versionner notre code source et le connecter à Jenkins. Allons sur Github créer un nouveau dépôt appelé Jenkins-datascientest, avec une visibilité public:
-![alt text](image-17.png)
+![alt text](readme_images/image-17.png)
 
 
 Nous pouvons à présent créer notre dépôt en cliquant sur le bouton Create repository. Une fois sur l'interface de dépôt, nous pouvons aller sur les réglages du dépôt en cliquant sur settings.
-![alt text](image-18.png)
+![alt text](readme_images/image-18.png)
 
 
 ### b.2 - Qu'est-ce qu'un webhook ?
@@ -353,11 +353,11 @@ Cette URL de webhook est appelée point de terminaison de webhook. Les points de
 Nous allons donc le mettre en place sur Github afin d'alerter notre instance de Jenkins.
 
 Nous pouvons à présent cliquer sur webhooks.
-![alt text](image-19.png)
+![alt text](readme_images/image-19.png)
 
 
 Nous pouvons cliquer sur Add Webhook.
-![alt text](image-20.png)
+![alt text](readme_images/image-20.png)
 
 
 Dans le formulaire, nous devons remplir le champ Payload URL. Nous allons donc remplir ce champ avec la combinaison suivante :
@@ -367,7 +367,7 @@ L'endpoint github-webhook
 Le contenu complet sera donc http://votreadesseip:8080/github-webhook/. Vous devrez remplacer votreadresseip par l'adresse IP de votre serveur.
 
 Pour le champ Content type, nous choisirons application/json.
-![alt text](image-21.png)
+![alt text](readme_images/image-21.png)
 
 
 À présent, nous devons configurer les évènements qui alerteront Jenkins et déclencheront nos jobs de construction.
@@ -461,7 +461,7 @@ chmod 700 get_helm.sh
 ./get_helm.sh
 ```
 
-![alt text](image-22.png)
+![alt text](readme_images/image-22.png)
 ## D - Installation de Docker
 Docker est une plate-forme parfaitement adaptée à l'écosystème DevOps. C'est une solution appropriée pour les éditeurs de logiciels qui ne peuvent pas suivre le rythme de l'évolution de la technologie, des activités et des besoins des clients. Cela fait de Docker un choix évident pour développer et accélérer les opérations dans une entreprise.
 
@@ -820,7 +820,7 @@ pipeline {
 
 ### d.5 - Stages et Stage
 La section stages permet de générer différentes étapes sur le pipeline qui seront visualisées sous la forme de différents segments lors de l'exécution de la tâche.
-![alt text](image-23.png)
+![alt text](readme_images/image-23.png)
 
 
 Jenkins divise graphiquement l'exécution du pipeline en fonction des étapes définies et affiche leur durée et si elle a réussi ou non. La directive stage va dans la section stages et devrait contenir une directive steps, une directive agent facultative ou d'autres directives spécifiques à une étape.
@@ -973,7 +973,7 @@ pipeline {
 }
 ```
 Nous obtiendrons ceci en termes de résultats :
-![alt text](image-24.png)
+![alt text](readme_images/image-24.png)
 
 
 Les deux scripts exécuteront les tests sur différents nœuds car ils exécutent des tests de plate-forme spécifiques. Le parallélisme peut également être utilisé pour exécuter simultanément des étapes sur le même nœud en utilisant le multithreading, si votre serveur Jenkins dispose de suffisamment de CPU.
@@ -1254,12 +1254,12 @@ Il est essentiel de créer une tâche de build Jenkins avant de lancer celui-ci.
 ### Créer un nouvel élément
 
 Dans le tableau de bord Jenkins, cliquons sur New Item qui est la première option du dashboard comme indiqué :
-![alt text](image-25.png)
+![alt text](readme_images/image-25.png)
 
 Nous devons donner un nom à notre projet et ensuite choisir un type de projet.
 
 Nous appellerons datascientest-ci-cd et nous choisirons le type pipelines car nous partirons de notre fichier Jenkinsfile afin de décrire les tâches à automatiser :
-![alt text](image-26.png)
+![alt text](readme_images/image-26.png)
 
 En cliquant sur le bouton OK, notre Job Jenkins sera prêt à être configuré. Nous pouvons créer autant de Jobs Jenkins selon nos besoins. La procédure de création de Job reste la même quel que soit le type de Job. Seuls les paramètres de configurations pourront varier en fonction du type de Jobs.
 
@@ -1268,7 +1268,7 @@ Nous commençons par remplir la section "Description" qui est un simple champ da
 
 Ceci est notre projet Jenkins ci/cd chez Datascientest
 
-![alt text](image-27.png)
+![alt text](readme_images/image-27.png)
 
 Outre le champ Description, d'autres options sont disponibles dans la section Général, parlons de certains champs du formulaire qui sont des cases à cocher :
 
@@ -1286,7 +1286,7 @@ Une fois que nous avons ajouté la description, passons à la section suivante.
 
 ## C - Projet Github
 Nous devons cocher la case GitHub project et remplir le formulaire qui apparaîtra en utilisant l'url de notre dépôt git:
-![alt text](image-28.png)
+![alt text](readme_images/image-28.png)
 
 Jenkins utilise Git comme outil de gestion de version de code source. Après avoir terminé la gestion du code source, nous allons ensuite vérifier l'option Jenkins Build Triggers.
 
@@ -1311,19 +1311,19 @@ Ensuite, nous devons spécifier le chemin du fichier Jenkinsfile depuis notre d�
 Jenkins essaiera immédiatement de vérifier s'il peut récupérer le fichier depuis notre dépôt avant de sauvegarder le projet.
 
 Pour le cours, nous créerons le fichier Jenkinsfile au sein de notre dépôt Github
-![alt text](image-29.png)
+![alt text](readme_images/image-29.png)
 
 
 Nous devons ensuite spécifier le dépôt dans lequel se trouve le fichier Jenkinsfile ainsi que le chemin ou le trouver dans le dépôt. Jenkins essaiera par défaut de récupérer le Jenkinsfile à la racine de notre dépôt Github. Nous devons récupérer l'URL en SSH de notre dépôt et le passer à Jenkins.
 
 Jenkins essaiera immédiatement de vérifier s'il peut bien récupérer le fichier dans le dit dépôt avant de sauvegarder le projet . Pour le cours, nous créerons le fichier Jenkinsfile depuis au sein de notre dépôt Github.
-![alt text](image-30.png)
+![alt text](readme_images/image-30.png)
 
 
 Nous choisissons Git comme SCM et définissons le chemin de notre dépôt Github . Nous définissons également sur None le champ Credentials car notre dépôt est public et Jenkins pourra récupéré le fichier Jenkinsfile sans avoir besoin de s'authentifier.
 
 Nous laisserons le reste des champs par défaut et nous définirons dans le champ Script Path la valeur Jenkinsfile puisse que le fichier Jenkinsfile se trouvera à la racine de notre projet. S'il avait été dans un répertoire appelé pipeline, nous aurions rempli à la place pipeline/Jenkinsfile.
-![alt text](image-31.png)
+![alt text](readme_images/image-31.png)
 
 
 Une fois terminé, nous pouvons sauvegarder notre travail en cliquant sur le bouton Save .
@@ -1335,7 +1335,7 @@ Une liste de variable est disponible au sein de Jenkins en ouvrant l'url du serv
 ```
 http://ip_de_votre_masterjenkins:8080/env-vars.html
 ```
-![alt text](image-32.png)
+![alt text](readme_images/image-32.png)
 
 Nous les utiliserons dans le fichier Jenkinsfile . Une variable d'environnement Jenkins est une variable globale exposée via la variable env et utilisée n'importe où dans le fichier Jenkinsfile.
 
@@ -1505,29 +1505,29 @@ users:
 Nous pouvons copier le contenu de ce fichier et le stocker sur notre machine personnelle, nous nommerons ce fichier config.
 
 Allons à présent créer nos éléments de connexion sur Jenkins. Nous pouvons cliquer sur le bouton Dashboard afin de revenir sur le tableau de bord, cliquons ensuite sur le menu Manage Jenkins et une fois sur cette vue nous pouvons cliquer sur le menu Credentials :
-![alt text](image-33.png)
+![alt text](readme_images/image-33.png)
 
 Cliquons ensuite sur system :
-![alt text](image-34.png)
+![alt text](readme_images/image-34.png)
 
 Nous pouvons ensuite cliquer sur Global credentials (unrestricted) .
-![alt text](image-35.png)
+![alt text](readme_images/image-35.png)
 
 Sur la nouvelle vue, cliquons sur le bouton add credentials :
-![alt text](image-36.png)
+![alt text](readme_images/image-36.png)
 
 Nous allons créer un Credential de type secret file dans lequel nous chargerons le fichier config grâce au bouton parcourir. Sur le champs ID nous remplirons config et comme description, nous remplirons fichier de configuration kubernetes.
-![alt text](image-37.png)
+![alt text](readme_images/image-37.png)
 
 Nous devons enfin cliquer sur le bouton create.
 
 Nous devons également créer une variable de type secret text afin d'y définir le mot de passe utilisé par Jenkins pour pousser nos images au sein de Dockerhub. Nous appellerons cette variable DOCKER_HUB_PASS:
 
 Dans secret il faudra renseigner le mot de passe de votre compte dockerHub
-![alt text](image-38.png)
+![alt text](readme_images/image-38.png)
 
 Ceci sera la liste de nos informations secretes :
-![alt text](image-39.png)
+![alt text](readme_images/image-39.png)
 
 ## F - Création des fichiers de l'application et push sur le dépôt Github
 Nous allons à présent nous plonger dans la création des fichiers de notre API grâce à FastAPI. Le but n'est pas de passer en revue le développement d'une application FastAPI car nous partirons d'une simple API qui nous affichera dans un premier temps We Love Datascientest.
@@ -1791,7 +1791,7 @@ Affichage en sortie :
  create mode 100644 requirements.txt
 ```
 Nous allons récupérer le chemin de notre projet en SSH et le rajouter afin de pouvoir pousser notre code sur notre dépôt distant :
-![alt text](image-40.png)
+![alt text](readme_images/image-40.png)
 
 Nous allons rajouter ce chemin sur notre dépôt local :
 ```
@@ -1838,15 +1838,15 @@ Affichage en sortie :
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCzm8eg2jLPCQ3WKfS3rE2qrFCPtyY5yb81X/K73f8FQt9KLI0PXLuPwVqlQ/sMopC22o17R8zd/8ndzw0y5h/TQf0u5P/feZ7YA4gPYX6eFc+n/eAY+jGAJ4sUQjI1/boXslW8wia23QVD9S+m5g1xNIUkV4zOBI3srVa1Dkh9VFh0hXL1rclG+VByC6kq0fM2wqxF62KhOueQsLz9Yvi80gLUk6aJkHmAXNs1X4HhR0ysEwFuO1T7ZOY9jZRYEU8KNFfp99vIdTLgJWHEFdmm+0eS4yEXyCuFK73tyS2cSQg6uglMk+ZymEPHlQPMfzYSLacYF4Onk60JqL8qYUHcjX4+V5Gz4xWN3xA3G6yKFVb4UcsQlktnR1aOJb1H3Kqgz8pWTfLFvy+2hrKcJ4fSYltbuCd/3/4V3OrG/bloURp5ReVrrzlXEKibh7OO18eZ9r0Qc5v/thxtap4x8c+Y9QzfvfaEd3on1forHAPxiYKknXKUlkZR5dox6UKeGmM= ubuntu@ip-172-31-26-97
 ```
 Nous irons copier cette clé sur notre compte Github, notre clé privée qui est le fichier ~/.ssh/id_rsa doit être conservé précieusement et par conséquent non divulgué . Sur notre compte Github, nous irons sur la partie profile et en suite nous cliquerons sur le sous-menu settings.
-![alt text](image-41.png)
+![alt text](readme_images/image-41.png)
 
 Nous cliquerons ensuite sur le menu SSH and GPG keys
-![alt text](image-42.png)
+![alt text](readme_images/image-42.png)
 
 Nous pouvons à présent cliquer sur le bouton New SSH Key. Nous fournissons le titre serveur_datascientest à notre clé SSH, nous laissons le champ Key type à Authentication Key et nous remplissons la valeur copiée depuis notre serveur sur le fichier ~/.ssh/id_rsa.pub.
 
 Nous pouvons à présent enregistrer en cliquant sur le bouton Add SSH Key.
-![alt text](image-43.png)
+![alt text](readme_images/image-43.png)
 
 Une fois ceci terminé, nous devons entrer notre mot de passe Github afin que nous puissions confirmer que c'est bien nous l'auteur de la modification. Nous pouvons à présent pousser notre code sur notre dépôt distant :
 ```
@@ -1869,34 +1869,34 @@ To github.com:fallewi/Jenkins-datascientest.git
 Jusqu'à présent, nous avons mis en place la configuration nécessaire. Ensuite, nous sommes prêts à exécuter notre Job Jenkins. Nous devons déclencher le Job une première fois afin de pouvoir utiliser les Webhooks configurés entre Jenkins et Github.
 
 Pour le faire nous pouvons revenir sur le tableau de bord Jenkins et cliquer sur notre Job.
-![alt text](image-44.png)
+![alt text](readme_images/image-44.png)
 
 Enfin cliquer sur le bouton Build Now.
-![alt text](image-45.png)
+![alt text](readme_images/image-45.png)
 
 Nous pouvons cliquer sur l'id du Build #1 afin d'accéder au premier Build de notre Pipeline.
-![alt text](image-46.png)
+![alt text](readme_images/image-46.png)
 
 Nous pouvons ensuite cliquer sur le menu Pipeline Overview afin d'avoir un visuel sur les différentes étapes du Pipeline.
-![alt text](image-47.png)
+![alt text](readme_images/image-47.png)
 
 Nous avons le pipeline qui est lancé et passe toutes les étapes. Cependant, il coince sur la dernière étape qui est le déploiement en production attendant notre validation. Nous pouvons cliquer que l'étape Deploiement en prod et sur le menu déroulant Wait for interactive input.
-![alt text](image-48.png)
+![alt text](readme_images/image-48.png)
 
 Nous devons valider afin que le déploiement en environnement de production puisse se faire.
-![alt text](image-49.png)
+![alt text](readme_images/image-49.png)
 
 Nous pouvons donc cliquer en haut sur l'id du build , et ensuite cliquer sur le menu Console Output
-![alt text](image-50.png)
+![alt text](readme_images/image-50.png)
 
 Pour valider cette étape nous devons cliquer sur le bouton yes tout en bas afin d'approuver le déploiement en production.
-![alt text](image-51.png)
+![alt text](readme_images/image-51.png)
 
 Nous pouvons valider que toutes les étapes se sont déroulées avec succès.
-![alt text](image-52.png)
+![alt text](readme_images/image-52.png)
 
 Vérifions à présent notre compte Docker Hub afin de vérifier que nous avons bien poussé l'image.
-![alt text](image-53.png)
+![alt text](readme_images/image-53.png)
 
 Nous pouvons voir que l'image est bien présente.
 
@@ -1956,7 +1956,7 @@ To github.com:fallewi/Jenkins-datascientest.git
    e601dc8..46d38fb  master -> master
 ```
 Nous pouvons remarquer qu'une seconde construction a été déclenchée automatiquement :
-![alt text](image-54.png)
+![alt text](readme_images/image-54.png)
 
 Toutes les étapes seront rejouées par Jenkins. Une fois terminé, nous pouvons à présent vérifier si nous avons la mise à jour faite sur notre application et sur nos différents environnements.
 
@@ -1981,7 +1981,7 @@ replicaset.apps/app-fastapi-65f9f4d86    0         0         0       12m
 ```
 vérifions à présent notre application sur le port 31377 de notre serveur :
 
-![alt text](image-55.png)
+![alt text](readme_images/image-55.png)
 
 Nous avons mis en place notre pipeline CI/CD avec Jenkins de bout en bout. Et à présent, à chaque changement de code, Jenkins pourra redéployer notre code jusqu'en environnement de staging et ne pourra déployer en production qu'après notre validation manuelle. Nous avons donc mis en place un cas de Livraison Continue avec Jenkins.
 # VI - Jenkins Blue Ocean
@@ -2005,31 +2005,31 @@ Gratuit : Blue Ocean est totalement gratuit. Il s'agit d'un plugin dans Jenkins 
 Pour installer le Blue Ocean dans le Jenkins, nous devons utiliser la version Jenkins 2.7.x ou ultérieure.
 
 Dans l'écran d'accueil de Jenkins (tableau de bord Jenkins), cliquons sur l'option Manage Jenkins sur le côté gauche de l'écran.
-![alt text](image-56.png)
+![alt text](readme_images/image-56.png)
 
 Maintenant, cliquons sur Plugins.
-![alt text](image-57.png)
+![alt text](readme_images/image-57.png)
 
 Dans la page suivante, cliquons sur l'onglet Available.
-![alt text](image-58.png)
+![alt text](readme_images/image-58.png)
 
 Dans le champ de recherche, entrons Blue Ocean et cochons sur la checkbox afin de sélectionner le plugin Blue Ocean et cliquons sur le bouton install:
-![alt text](image-59.png)
+![alt text](readme_images/image-59.png)
 
 Une fois l'installation terminée, nous pouvons revenir sur le tableau de bord Jenkins. Nous retrouvons un menu open blue ocean sur le menu de gauche de Jenkins.
-![alt text](image-60.png)
+![alt text](readme_images/image-60.png)
 
 Nous arrivons sur l'interface de Blue Ocean.
-![alt text](image-61.png)
+![alt text](readme_images/image-61.png)
 
 Nous cliquons sur notre projet datascientest-ci-cd.
-![alt text](image-62.png)
+![alt text](readme_images/image-62.png)
 
 Nous pouvons à présent cliquer sur le bouton run afin de voir Blue Ocean en action.
-![alt text](image-63.png)
+![alt text](readme_images/image-63.png)
 
 Une fois terminé, nous avons une interface qui nous montre que tout est Ok.
-![alt text](image-64.png)
+![alt text](readme_images/image-64.png)
 # VII - Créer et gérer des utilisateurs avec Jenkins
 ## A - Présentation
 Généralement, dans une grande organisation, il existe plusieurs équipes distinctes pour exécuter et gérer les Job au sein de Jenkins. Mais gérer un nombre important d'utilisateurs et leur attribuer des rôles peut s'avérer fastidieux en termes de gestion.
@@ -2039,16 +2039,16 @@ Par défaut, lorsque nous créons un utilisateur dans Jenkins, celui-ci est admi
 Pour nous permettre d'attribuer différents rôles et privilèges à différents utilisateurs dans Jenkins, nous devons installer le plugin Role Strategy.
 
 Dans l'écran d'accueil de Jenkins (tableau de bord Jenkins), cliquons sur l'option Manage Jenkins sur le côté gauche de l'écran.
-![alt text](image-65.png)
+![alt text](readme_images/image-65.png)
 
 Maintenant, cliquons sur Plugins.
-![alt text](image-66.png)
+![alt text](readme_images/image-66.png)
 
 Dans la page suivante, cliquons sur l'onglet Available.
-![alt text](image-67.png)
+![alt text](readme_images/image-67.png)
 
 Dans le champ de recherche, entrons Role-based Authorization Strategy et cochons sur la checkbox afin de sélectionner le plugin Role-based Authorization Strategy:
-![alt text](image-68.png)
+![alt text](readme_images/image-68.png)
 
 Cliquons sur le bouton Install.
 
@@ -2056,27 +2056,27 @@ Cliquons sur le bouton Install.
 Après l'installation du plugin, allons dans le menu Manage Jenkins puis cliquons sur Security.
 
 Dans la section Security Realm, sélectionnons Jenkins' own user database.
-![alt text](image-69.png)
+![alt text](readme_images/image-69.png)
 
 Dans la section Authorization, sélectionnons role-based strategy. Cliquons à présent sur le bouton save.
 
 Nous sommes défini en tant qu'administrateur automatiquement par le plugin. Pour le vérifier, nous revenons sur notre tableau de bord Jenkins, nous cliquons sur le menu Manage Jenkins et nous cliquons sur le bouton Manage and Assign Roles.
 
 Nous cliquons sur le bouton Assign Roles afin de vérifier le rôle actuel :
-![alt text](image-70.png)
-![alt text](image-71.png)
+![alt text](readme_images/image-70.png)
+![alt text](readme_images/image-71.png)
 
 Nous pouvons donc remarquer que nous avons reçu le rôle d'administrateur.
 
 ## C - Créer un utilisateur sur Jenkins
 Il est maintenant temps de configurer nos utilisateurs dans le système. Cliquons sur le menu Manage Jenkins et faisons défiler vers le bas, cliquons sur le menu Manage Users.
-![alt text](image-72.png)
+![alt text](readme_images/image-72.png)
 
 Nous pouvons cliquer sur le bouton create user afin de rajouter un utilisateur.
-![alt text](image-73.png)
+![alt text](readme_images/image-73.png)
 
 Ajoutons un utilisateur appelé developpeur avec les paramètres qui vont bien, un mot de passe fort, un nom complet et une adresse email et cliquons sur le bouton create user:
-![alt text](image-74.png)
+![alt text](readme_images/image-74.png)
 
 C'est fait, nous avons à présent un second utilisateur sur notre système.
 
@@ -2084,10 +2084,10 @@ C'est fait, nous avons à présent un second utilisateur sur notre système.
 Nous allons à présent attribuer des rôles à notre nouvel utilisateur. Revenons sur notre tableau de bord Jenkins, nous cliquons sur le menu Manage Jenkins et nous cliquons sur le bouton Manage and Assign Roles. Nous cliquons sur le bouton Manage Roles afin d'ajouter un nouveau rôle. Sur le champ role to add ajoutons developper et cliquons sur le bouton add.
 
 Nous pouvons à présent définir les droits qu'aura ce groupe. Donnons à ce groupe les droits read, create, view et update et cliquons sur le bouton save :
-![alt text](image-75.png)
+![alt text](readme_images/image-75.png)
 
 Une fois ces actions terminées, nous pouvons créer la relation entre notre utilisateur et notre nouveau rôle. Nous restons sur le menu Manage and Assign Roles et nous choisissons le menu assign roles. Une fois que nous y sommes, nous pouvons remplir le nom de notre utilisateur sur le champ user/group to add définir le rôle auquel il appartient en cliquant sur la case à cocher du rôle que nous voulons assigner.
-![alt text](image-76.png)
+![alt text](readme_images/image-76.png)
 # VIII - Notification par e-mail
 
 ## A - Présentation
@@ -2119,18 +2119,18 @@ Rendez-vous sur votre compte Gmail, si vous n'en avez pas, vous pouvez le créer
 Cliquons sur notre photo de profil sur le compte Gmail que nous souhaitons configurer.
 
 Cliquons sur le bouton Gérer votre compte Google.
-![alt text](image-77.png)
+![alt text](readme_images/image-77.png)
 
 Pour que cette méthode fonctionne, la double authentification doit être obligatoirement activée !
 Choisissons l'onglet Sécurité dans le panneau de gauche.
-![alt text](image-78.png)
+![alt text](readme_images/image-78.png)
 
 Dans la section Se connecter à Google, assurons-nous d'avoir effectué la vérification en deux étapes. S'il n'est pas activé, cliquons dessus pour effectuer cette vérification.
-![alt text](image-79.png)
+![alt text](readme_images/image-79.png)
 
 Rendons nous sur le lien suivant App Password et entrons un nom le notre application Jenkins
 Nous aurons alors un pop-up avec un mot de passe à copier. Il s'agit du mot de passe SMTP que nous devons coller dans la configuration de Jenkins.
-![alt text](image-80.png)
+![alt text](readme_images/image-80.png)
 
 Après avoir mis en place les configurations de notification par e-mail sur Jenkins, testons d'abord cette configuration avant de l'implémenter sur Jenkinsfile.
 
@@ -2305,7 +2305,7 @@ De plus, il s'intègre bien à GitHub, permettant productivité et flexibilité 
 Vous avez pu voir tout au long de ce cours différentes notions et il est temps à présent de passer à la pratique. Vous avez toutes les cartes en main pour vous lancer et mettre en place un pipeline CI/CD afin d'augmenter la vélocité des livraisons de votre entreprise afin de la rendre plus compétitive sur le marché.
 
 Contexte de L'examen :
-![alt text](image-81.png)
+![alt text](readme_images/image-81.png)
 
 Vous êtes recruté en tant qu'ingénieur Devops Junior chez un client.
 
