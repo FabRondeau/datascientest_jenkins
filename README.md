@@ -1224,3 +1224,763 @@ Affichage en sortie :
 6) Les apprenants l'apprécient et deviennent rapidement compétents
 ```
 Vous pourrez retrouver une documentation plus complète sur la commande SED à l'adresse https://www.gnu.org/software/sed/manual/sed.html
+# V - Les types de Jobs Jenkins
+## A - Présentation
+Les Jobs Jenkins sont un ensemble donné de tâches qui s'exécutent séquentiellement tel que défini par l'utilisateur. Toute automatisation est implémentée dans Jenkins est un Job Jenkins. Ces travaux constituent une partie importante du processus de construction de Jenkins. Nous pouvons créer et construire des Jobs Jenkins pour tester et déployer notre application ou notre projet.
+
+Lorsque nous travaillons avec Jenkins, les termes Jenkins Job et Jenkins Project sont synonymes. Avec un Job Jenkins, nous pouvons cloner le code source à partir d'un gestionnaire de version comme Git, compiler le code et exécuter des tests unitaires en fonction de nos besoins.
+
+Il existe différents types de Job Jenkins disponibles à des fins différentes. En fonction de la complexité et de la nature de notre projet, nous pouvons choisir celui qui correspond le mieux à nos besoins.
+
+Examinons brièvement les différents types de job à Jenkins :
+
+| Type de Jobs | Description |
+|--------------|-------------|
+| Projet Freestyle |	C'est la fonctionnalité centrale et la plus largement utilisée dans Jenkins. Il s'agit d'un travail de build Jenkins disponible offrant plusieurs opérations. Grâce à cette option, vous pouvez créer et exécuter des pipelines ou des scripts de manière transparente.|
+| Projet Maven |	Si votre travail consiste à gérer et à créer des projets contenant des fichiers POM, vous préférez utiliser Maven Project pour créer des travaux dans Jenkins. En choisissant cette option, Jenkins, par défaut, sélectionnera les fichiers POM, effectuera des configurations et exécutera des build. Un fichier POM (Project Object Model) est un élément central de la configuration d'un projet Maven, décrivant son contenu, ses dépendances et les actions à effectuer lors de sa construction. Un fichier POM est un fichier XML utilisé par Maven pour définir la configuration, les dépendances et la structure d'un projet logiciel Java.|
+| Pipeline | Un travail basé sur un Jenkinsfile, offrant une approche plus puissante et flexible pour la création de pipelines et de flux de travail d'intégration continue et de déploiement continu (CI/CD).|
+| Projet multiconfiguration |	Si vous travaillez sur un projet nécessitant plusieurs configurations, vous devez utiliser l'option "Projet multiconfiguration". Cette option permet de créer plusieurs configurations pour tester dans plusieurs environnements. |
+| Organisation GitHub	| Cette option analyse le compte GitHub de l'utilisateur pour tous les référentiels d'une organisation spécifique, correspondant aux marqueurs définis pour automatiser les opérations associées. |
+
+## A - Configurer les tâches de build
+Nous allons nous lancer dans la pratique de Jenkins.
+
+Nous devons au préalable installer git (si celui-ci n'est pas installé sur votre machine) avant de commencer à configurer nos projets Jenkins :
+```
+sudo apt install git -y
+```
+Il est essentiel de créer une tâche de build Jenkins avant de lancer celui-ci. Dans cette section, nous allons créer notre premier travail Jenkins et terminer la configuration initiale.
+
+### Créer un nouvel élément
+
+Dans le tableau de bord Jenkins, cliquons sur New Item qui est la première option du dashboard comme indiqué :
+![alt text](image-25.png)
+
+Nous devons donner un nom à notre projet et ensuite choisir un type de projet.
+
+Nous appellerons datascientest-ci-cd et nous choisirons le type pipelines car nous partirons de notre fichier Jenkinsfile afin de décrire les tâches à automatiser :
+![alt text](image-26.png)
+
+En cliquant sur le bouton OK, notre Job Jenkins sera prêt à être configuré. Nous pouvons créer autant de Jobs Jenkins selon nos besoins. La procédure de création de Job reste la même quel que soit le type de Job. Seuls les paramètres de configurations pourront varier en fonction du type de Jobs.
+
+## B - Configuration de la gestion du code source
+Nous commençons par remplir la section "Description" qui est un simple champ dans lequel nous remplissons la description sommaire de notre Job :
+
+Ceci est notre projet Jenkins ci/cd chez Datascientest
+
+![alt text](image-27.png)
+
+Outre le champ Description, d'autres options sont disponibles dans la section Général, parlons de certains champs du formulaire qui sont des cases à cocher :
+
+
+| Choix	| Description |
+|-------|-------------|
+| Discard old builds | Si nous préférons supprimer les anciennes versions lors du lancement d'une nouvelle version, utilisez cette option.|
+| Do not allow concurrent builds | Si nous préférons interdire les constructions simultanées. |
+| Pipeline | Freestyle Project n'est souvent pas une bonne option pour créer des Jobs Jenkins. Par conséquent, Pipeline est la meilleure option. Utilisez l'option Pipeline pour créer des tâches Jenkins, en particulier lorsque vous travaillez sur des activités de longue durée.|
+| GitHub project | Si nous avons du code source au sein d'un dépôt GitHub et que nous souhaitons l'utiliser dans notre job Jenkins, utilisons l'option Projet GitHub. Lors de la sélection de cet avis, assurons-nous de spécifier l'URL GitHub. |
+| This project is parameterized | Cette option nous permet de créer des builds avec différents paramètres qui seraient transmis lors de l'exécution. Chaque paramètre aura un nom et une valeur spécifiques. |
+| Throttle builds | Choisissez l'option Throttle Builds lorsque vous travaillez sur un projet avec un temps minimum requis entre les builds en fonction du taux maximum attendu. |
+
+Une fois que nous avons ajouté la description, passons à la section suivante.
+
+## C - Projet Github
+Nous devons cocher la case GitHub project et remplir le formulaire qui apparaîtra en utilisant l'url de notre dépôt git:
+![alt text](image-28.png)
+
+Jenkins utilise Git comme outil de gestion de version de code source. Après avoir terminé la gestion du code source, nous allons ensuite vérifier l'option Jenkins Build Triggers.
+
+## D - Déclencheur Jenkins
+Avant l'étape de construction de Jenkins, le déclenchement du travail est essentiel. La création de déclencheurs dans Jenkins nous permet d'exécuter une tâche à chaque occurrence. En d'autres termes, chaque fois qu'il y a un changement dans le code source, Jenkins déclenche automatiquement une construction avec la mise à jour la plus récente.
+
+Sur la partie Build Triggers du Job Jenkins, plusieurs options sont disponibles. Analysons chacunes en détail:
+
+
+| Choix	| Description |
+| Build after other projects are built |Avec cette option, une nouvelle génération n'est déclenchée qu'après l'exécution réussie d'autres générations. |
+| Build periodically | Si vous choisissez d'exécuter des builds périodiquement, choisissez cette option. Assurez-vous de spécifier l'heure à laquelle vous souhaitez que la génération démarre. Jenkins mettra en place une sorte de CRON afin de construire périodiquement notre Job |
+| GitHub Pull Requests | L'utilisation de cette option de déclencheur de génération permet l'intégration avec les activités GitHub Pull Requests and Issues. De plus, il lance des exécutions en sortie. |
+| GitHub hook trigger for GITScm polling | Utilisez cette option si vous devez exécuter vos builds à l'aide des webhooks GitHub. |
+| Poll SCM | Semblable à l'option de déclencheur de génération périodique de Jenkins Build, nous devons spécifier une minuterie pour Poll SCM. Cependant, l'option SCM dans Jenkins exécute la génération uniquement lorsqu'il y a un changement de code pendant cette période. |
+| Trigger builds remotely |	Choisissez les builds déclenchés à distance si vous avez besoin de déclencher de nouveaux builds à l'aide d'une URL dédiée. |
+
+Nous devons cocher la case GitHub hook trigger for GITScm polling pour que GitHub puisse envoyer des Webhooks qui déclencherons la construction de notre Job.
+
+Ensuite, nous devons spécifier le chemin du fichier Jenkinsfile depuis notre dépôt. Jenkins essaiera par défaut de le récupérer à la racine de ce dernier. Nous devons donc lui renseigner l'URL SSH.
+
+Jenkins essaiera immédiatement de vérifier s'il peut récupérer le fichier depuis notre dépôt avant de sauvegarder le projet.
+
+Pour le cours, nous créerons le fichier Jenkinsfile au sein de notre dépôt Github
+![alt text](image-29.png)
+
+
+Nous devons ensuite spécifier le dépôt dans lequel se trouve le fichier Jenkinsfile ainsi que le chemin ou le trouver dans le dépôt. Jenkins essaiera par défaut de récupérer le Jenkinsfile à la racine de notre dépôt Github. Nous devons récupérer l'URL en SSH de notre dépôt et le passer à Jenkins.
+
+Jenkins essaiera immédiatement de vérifier s'il peut bien récupérer le fichier dans le dit dépôt avant de sauvegarder le projet . Pour le cours, nous créerons le fichier Jenkinsfile depuis au sein de notre dépôt Github.
+![alt text](image-30.png)
+
+
+Nous choisissons Git comme SCM et définissons le chemin de notre dépôt Github . Nous définissons également sur None le champ Credentials car notre dépôt est public et Jenkins pourra récupéré le fichier Jenkinsfile sans avoir besoin de s'authentifier.
+
+Nous laisserons le reste des champs par défaut et nous définirons dans le champ Script Path la valeur Jenkinsfile puisse que le fichier Jenkinsfile se trouvera à la racine de notre projet. S'il avait été dans un répertoire appelé pipeline, nous aurions rempli à la place pipeline/Jenkinsfile.
+![alt text](image-31.png)
+
+
+Une fois terminé, nous pouvons sauvegarder notre travail en cliquant sur le bouton Save .
+
+## E - Variables d'environnement
+Dans le monde de la programmation, les variables sont très utilisés afin de rendre dynamique le code source. Ce système est très utilisé quand nous voulons avoir un pipeline que nous pourrons réutiliser dans des contextes différents.
+
+Une liste de variable est disponible au sein de Jenkins en ouvrant l'url du serveur master sur un navigateur et en y ajoutant env-vars.html. L'url finale est donc sous ce format :
+```
+http://ip_de_votre_masterjenkins:8080/env-vars.html
+```
+![alt text](image-32.png)
+
+Nous les utiliserons dans le fichier Jenkinsfile . Une variable d'environnement Jenkins est une variable globale exposée via la variable env et utilisée n'importe où dans le fichier Jenkinsfile.
+
+Toute valeur stockée dans la variable env est stockée en tant que type String. Les variables d'environnement peuvent être définies au niveau supérieur du pipeline, au niveau de l'étape spécifique ou à l'intérieur du bloc script.
+
+Nous pouvons lister toutes les variables d'environnement en exécutant la commande shell printenv de la façon suivante dans un pipeline :
+```
+pipeline {
+    agent any
+
+    stages {
+        stage("Datascientest Variables") {
+            steps {
+                sh "printenv"
+            }
+        }
+    }
+}
+```
+Nous pourrons accéder aux variables d'environnement dans les étapes du pipeline via l'objet env. Un exemple simple serait d'utiliser env.BUILD_ID qui renverra l'ID de build actuel.
+
+Nous pouvons également utiliser une version abrégée BUILD_ID dans un fichier de pipeline de la façon suivante :
+```
+pipeline {
+    agent any
+
+    stages {
+        stage("Datascientest Env Variables") {
+            steps {
+                echo "The build id is ${env.BUILD_ID} or $BUILD_ID or ${BUILD_ID} "
+            }
+        }
+    }
+}
+```
+Les variables d'environnement peuvent être définies de manière déclarative à l'aide du bloc environment { }, à l'aide de env.VARIABLE_NAME, ou du bloc withEnv(["VARIABLE_NAME=value"]) {}
+```
+pipeline {
+    agent any
+
+    environment {
+        SHOOL = "datascientest"
+    }
+
+    stages {
+        stage("Env Variables") {
+            environment {
+                NAME = "Datascientest"
+            }
+
+            steps {
+                echo "SHOOL = ${env.SHOOL}"
+                echo "NAME = ${env.NAME}"
+
+                script {
+                    env.TEST_VARIABLE = "some test value"
+                }
+
+                echo "TEST_VARIABLE = ${env.TEST_VARIABLE}"
+
+                withEnv(["ANOTHER_ENV_VAR=here is some value"]) {
+                    echo "ANOTHER_ENV_VAR = ${env.ANOTHER_ENV_VAR}"
+                }
+            }
+        }
+    }
+}
+```
+Le fichier Jenkinsfile prend en charge le remplacement des variables d'environnement. Il y a quelques règles à connaître.
+
+Le bloc withEnv(["env=value]) { } peut remplacer n'importe quelle variable d'environnement.
+
+Les variables définies à l'aide de bloc environment {} ne peuvent pas être remplacées à l'aide d' une affectation impérative env.VAR = "value".
+
+L'affectation impérative env.VAR = "value" ne peut remplacer que les variables d'environnement créées à l'aide de l'affectation impérative.
+
+Nous pouvons mettre en avant les trois cas dans le fichier suivant :
+```
+pipeline {
+    agent any
+
+    environment {
+        SHOOL = "datascientest"
+        NAME = "Anthony"
+    }
+
+    stages {
+        stage("Env Variables") {
+            environment {
+                NAME = "lewis" // overrides pipeline level NAME env variable
+                BUILD_ID = "2" // overrides the default BUILD_ID
+            }
+
+            steps {
+                echo "SHOOL = ${env.SHOOL}" // prints "SHOOL = bar"
+                echo "NAME = ${env.NAME}" // prints "NAME = lewis"
+                echo "BUILD_ID =  ${env.BUILD_ID}" // prints "BUILD_ID = 2"
+
+                script {
+                    env.SOMETHING = "1" // creates env.SOMETHING variable
+                }
+            }
+        }
+
+        stage("Override Variables") {
+            steps {
+                script {
+                    env.SHOOL = "I LOVE DATASCIENTEST!" // it can't override env.SHOOL declared at the pipeline (or stage) level
+                    env.SOMETHING = "2" // it can override env variable created imperatively
+                }
+
+                echo "SHOOL = ${env.SHOOL}" // prints "SHOOL = bar"
+                echo "SOMETHING = ${env.SOMETHING}" // prints "SOMETHING = 2"
+
+                withEnv(["SHOOL=DEV UNIVERSITY"]) { // it can override any env variable
+                    echo "SHOOL = ${env.SHOOL}" // prints "SHOOL = DEV UNIVERSITY"
+                }
+
+                withEnv(["BUILD_ID=1"]) {
+                    echo "BUILD_ID = ${env.BUILD_ID}" // prints "BUILD_ID = 1"
+                }
+            }
+        }
+    }
+}
+```
+
+Jenkins possède plusieurs types de secrets que nous pouvons utiliser afin s'authentifier sur différents environnements :
+
+* Username and password: qui peuvent être traités comme des composants séparés ou comme une chaîne séparée par deux-points au format nom d'utilisateur: mot de passe.
+* Secret text: un jeton tel qu'un jeton d'API (par exemple, un jeton d'accès personnel GitHub).
+* Secret file : qui est essentiellement le contenu secret d'un fichier. Nous utiliserons ce type au moment de fournir le fichier Kubeconfig à Jenkins afin qu'il puisse déployer sur Kubernetes grâce à HELM.
+* SSH Username with private key: qui consiste à fournir un nom d'utilisateur suivi d'une clé privée SSH afin de s'authentifier.
+* Certificate: qui consiste à fournir un fichier de certificat et un mot de passe facultatif. Par exemple des identifiants d'authentification du certificat d'hôte Docker.
+
+Nous pouvons générer depuis notre serveur un fichier de configuration Kubernetes grâce à la commande suivante :
+```
+mkdir ~/.kube
+sudo kubectl config view --raw > ~/.kube/config
+```
+Nous pouvons afficher le contenu de notre fichier de configuration Kubernetes :
+```
+cat ~/.kube/config
+```
+Affichage en sortie :
+```
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJkekNDQVIyZ0F3SUJBZ0lCQURBS0JnZ3Foa2pPUFFRREFqQWpNU0V3SHdZRFZRUUREQmhyTTNNdGMyVnkKZG1WeUxXTmhRREUyTnpZeU56QTNNakl3SGhjTk1qTXdNakV6TURZME5USXlXaGNOTXpNd01qRXdNRFkwTlRJeQpXakFqTVNFd0h3WURWUVFEREJock0zTXRjMlZ5ZG1WeUxXTmhRREUyTnpZeU56QTNNakl3V1RBVEJnY3Foa2pPClBRSUJCZ2dxaGtqT1BRTUJCd05DQUFRVGxqUzY4OU4wWGx3dk01OTNTL242VHp5NUczaFRadmxmSzNJSFZMdGoKRUMwM0RLU1VnWHphWWpTM1ZjYzRxb2duQkN6RG1vRmIwZHVQZ3gxSjVMVHhvMEl3UURBT0JnTlZIUThCQWY4RQpCQU1DQXFRd0R3WURWUjBUQVFIL0JBVXdBd0VCL3pBZEJnTlZIUTRFRmdRVWJMdHFOSUpZLy9aTm1reG82dUVTCks3QkxOTnd3Q2dZSUtvWkl6ajBFQXdJRFNBQXdSUUloQUp5VUR0MnlKcDdkYU1FRTN3bGJMWktCTkNhdE16bEYKMU94L1RxMnhtYXJHQWlCSWJWK1UrZnJka0p1eG1uc1VtM0l5Wmh0dnBJMmJXTGkxOXVHRE00VkhpQT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    server: https://127.0.0.1:6443
+  name: default
+contexts:
+- context:
+    cluster: default
+    user: default
+  name: default
+current-context: default
+kind: Config
+preferences: {}
+users:
+- name: default
+  user:
+    client-certificate-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJrRENDQVRlZ0F3SUJBZ0lJTS9LbVY2bXZRMnN3Q2dZSUtvWkl6ajBFQXdJd0l6RWhNQjhHQTFVRUF3d1kKYXpOekxXTnNhV1Z1ZEMxallVQXhOamMyTWpjd056SXlNQjRYRFRJek1ESXhNekEyTkRVeU1sb1hEVEkwTURJeApNekEyTkRVeU1sb3dNREVYTUJVR0ExVUVDaE1PYzNsemRHVnRPbTFoYzNSbGNuTXhGVEFUQmdOVkJBTVRESE41CmMzUmxiVHBoWkcxcGJqQlpNQk1HQnlxR1NNNDlBZ0VHQ0NxR1NNNDlBd0VIQTBJQUJDekd4VVc5ZHlLYllENlMKdmtqRFZnTkRkUTZnWHYweGlVczRoWnlZN053elRjT0JUTnpuRXVpNDNoNi9KY2tqWDhOTU5tclhiT21GM2tBSgpOaVpLYU5XalNEQkdNQTRHQTFVZER3RUIvd1FFQXdJRm9EQVRCZ05WSFNVRUREQUtCZ2dyQmdFRkJRY0RBakFmCkJnTlZIU01FR0RBV2dCVE9URWRHQUNVeVJmMnZYdzlyZnpwSkRWRzc4REFLQmdncWhrak9QUVFEQWdOSEFEQkUKQWlBN21VTk13NmRtVmI4d3RQT1JJaWFTemp3VVZnYnBZU25tc3h1RUYxSHUrUUlnT2Fqam9hRUFvR1Blc1AxMwpaWlh1cEhUMG1BcjJVS1J2ZG02QkVJMmphTmM9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0KLS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJkekNDQVIyZ0F3SUJBZ0lCQURBS0JnZ3Foa2pPUFFRREFqQWpNU0V3SHdZRFZRUUREQmhyTTNNdFkyeHAKWlc1MExXTmhRREUyTnpZeU56QTNNakl3SGhjTk1qTXdNakV6TURZME5USXlXaGNOTXpNd01qRXdNRFkwTlRJeQpXakFqTVNFd0h3WURWUVFEREJock0zTXRZMnhwWlc1MExXTmhRREUyTnpZeU56QTNNakl3V1RBVEJnY3Foa2pPClBRSUJCZ2dxaGtqT1BRTUJCd05DQUFTc1orTHJHdTZLZGhZNXorTG1xTzRYcGtWS0EvaTlVc0hoRGw4enIvVG0Ka2JpaUw5NEl6S1NlWFE4NWtLd254eDFlWlBzL2RmU1VEME5KcE04c01aWDlvMEl3UURBT0JnTlZIUThCQWY4RQpCQU1DQXFRd0R3WURWUjBUQVFIL0JBVXdBd0VCL3pBZEJnTlZIUTRFRmdRVXpreEhSZ0FsTWtYOXIxOFBhMzg2ClNRMVJ1L0F3Q2dZSUtvWkl6ajBFQXdJRFNBQXdSUUloQU50cjIzNTA2ZCtuMXZVdE5GRmJJTjgrNWxxSWQ5VFUKdVkveUZEZmFMZ0FEQWlCZkxhNHc4STdFYi9sa2pnTG1Wc2V5Sld2Q0dsZ21pOU9iU2IyOUxsVnRuQT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    client-key-data: LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk1IY0NBUUVFSUdVS29FNW56UDRwUG9rRnlRd2xwcEcxQWFWN2pIOXhkcGtRT1M3anpxbExvQW9HQ0NxR1NNNDkKQXdFSG9VUURRZ0FFTE1iRlJiMTNJcHRnUHBLK1NNTldBME4xRHFCZS9UR0pTemlGbkpqczNETk53NEZNM09jUwo2TGplSHI4bHlTTmZ3MHcyYXRkczZZWGVRQWsySmtwbzFRPT0KLS0tLS1FTkQgRUMgUFJJVkFURSBLRVktLS0tLQo=
+```
+Nous pouvons copier le contenu de ce fichier et le stocker sur notre machine personnelle, nous nommerons ce fichier config.
+
+Allons à présent créer nos éléments de connexion sur Jenkins. Nous pouvons cliquer sur le bouton Dashboard afin de revenir sur le tableau de bord, cliquons ensuite sur le menu Manage Jenkins et une fois sur cette vue nous pouvons cliquer sur le menu Credentials :
+![alt text](image-33.png)
+
+Cliquons ensuite sur system :
+![alt text](image-34.png)
+
+Nous pouvons ensuite cliquer sur Global credentials (unrestricted) .
+![alt text](image-35.png)
+
+Sur la nouvelle vue, cliquons sur le bouton add credentials :
+![alt text](image-36.png)
+
+Nous allons créer un Credential de type secret file dans lequel nous chargerons le fichier config grâce au bouton parcourir. Sur le champs ID nous remplirons config et comme description, nous remplirons fichier de configuration kubernetes.
+![alt text](image-37.png)
+
+Nous devons enfin cliquer sur le bouton create.
+
+Nous devons également créer une variable de type secret text afin d'y définir le mot de passe utilisé par Jenkins pour pousser nos images au sein de Dockerhub. Nous appellerons cette variable DOCKER_HUB_PASS:
+
+Dans secret il faudra renseigner le mot de passe de votre compte dockerHub
+![alt text](image-38.png)
+
+Ceci sera la liste de nos informations secretes :
+![alt text](image-39.png)
+
+## F - Création des fichiers de l'application et push sur le dépôt Github
+Nous allons à présent nous plonger dans la création des fichiers de notre API grâce à FastAPI. Le but n'est pas de passer en revue le développement d'une application FastAPI car nous partirons d'une simple API qui nous affichera dans un premier temps We Love Datascientest.
+
+Que nous modifierons par la suite afin de valider la modification de notre application lors des déploiements sur nos différents environnements.
+
+Commençons la création de notre environnement local. Nous aurons la structure suivante pour notre projet :
+```
++--- app
+|   +--- main.py
++--- fastapi
+|   +--- .helmignore
+|   +--- Chart.yaml
+|   +--- templates
+|   |   +--- deployment.yaml
+|   |   +--- hpa.yaml
+|   |   +--- ingress.yaml
+|   |   +--- NOTES.txt
+|   |   +--- service.yaml
+|   |   +--- serviceaccount.yaml
+|   |   +--- tests
+|   |   |   +--- test-connection.yaml
+|   |   +--- _helpers.tpl
+|   +--- values.yaml
++--- Dockerfile
++--- Jenkinsfile
++--- Requirements.txt
+```
+Créons notre projet appelé datascientest-jenkins et créons l'architecture de notre projet :
+```
+mkdir datascientest-jenkins
+cd datascientest-jenkins
+mkdir app
+touch app/main.py
+helm create fastapi
+touch Dockerfile
+touch requirements.txt
+```
+Dans le fichier app/main.py, nous mettons le contenu suivant :
+```
+from typing import Union
+from fastapi import FastAPI
+app = FastAPI()
+@app.get("/")
+def read_root():
+    return {"Hello": "We Love Datascientest !!"}
+```
+Dans le fichier Dockerfile, nous mettons le contenu suivant :
+```
+FROM python:3.9
+
+WORKDIR /code
+
+COPY ./requirements.txt /code/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
+COPY ./app /code/app
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+```
+Dans le fichier requirements.txt, nous mettons le contenu suivant :
+```
+uvicorn[standard]==0.20.0
+gunicorn==20.1.0
+fastapi[all]==0.88.0
+```
+Nous allons ensuite modifier le type de service utilisé dans notre fichier fastapi/values.yaml en remplaçant le bloc suivant :
+```
+service:
+  type: ClusterIP
+  port: 80
+```
+Par le contenu suivant :
+```
+service:
+  type: NodePort
+  port: 80
+```
+Nous allons également modifier le type de service utilisé dans notre fichier fastapi/values.yaml en remplaçant le bloc suivant :
+```
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+```
+Par le contenu suivant :
+```
+image:
+  repository: fallewi/datascientestapi # replace this yourdocker_hub_id/datascientestapi
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+```
+Dans le fichier Jenkinsfile, nous mettons le contenu suivant:
+```
+pipeline {
+environment { // Declaration of environment variables
+DOCKER_ID = "fallewi" // replace this with your docker-id
+DOCKER_IMAGE = "datascientestapi"
+DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
+}
+agent any // Jenkins will be able to select all available agents
+stages {
+        stage(' Docker Build'){ // docker build image stage
+            steps {
+                script {
+                sh '''
+                 docker rm -f jenkins
+                 docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
+                sleep 6
+                '''
+                }
+            }
+        }
+        stage('Docker run'){ // run container from our builded image
+                steps {
+                    script {
+                    sh '''
+                    docker run -d -p 80:80 --name jenkins $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+                    sleep 10
+                    '''
+                    }
+                }
+            }
+
+        stage('Test Acceptance'){ // we launch the curl command to validate that the container responds to the request
+            steps {
+                    script {
+                    sh '''
+                    curl localhost
+                    '''
+                    }
+            }
+
+        }
+        stage('Docker Push'){ //we pass the built image to our docker hub account
+            environment
+            {
+                DOCKER_PASS = credentials("DOCKER_HUB_PASS") // we retrieve  docker password from secret text called docker_hub_pass saved on jenkins
+            }
+
+            steps {
+
+                script {
+                sh '''
+                docker login -u $DOCKER_ID -p $DOCKER_PASS
+                docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+                '''
+                }
+            }
+
+        }
+
+stage('Deploiement en dev'){
+        environment
+        {
+        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+        }
+            steps {
+                script {
+                sh '''
+                rm -Rf .kube
+                mkdir .kube
+                ls
+                cat $KUBECONFIG > .kube/config
+                cp fastapi/values.yaml values.yml
+                cat values.yml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                helm upgrade --install app fastapi --values=values.yml --namespace dev
+                '''
+                }
+            }
+
+        }
+stage('Deploiement en staging'){
+        environment
+        {
+        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+        }
+            steps {
+                script {
+                sh '''
+                rm -Rf .kube
+                mkdir .kube
+                ls
+                cat $KUBECONFIG > .kube/config
+                cp fastapi/values.yaml values.yml
+                cat values.yml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                helm upgrade --install app fastapi --values=values.yml --namespace staging
+                '''
+                }
+            }
+
+        }
+  stage('Deploiement en prod'){
+        environment
+        {
+        KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+        }
+            steps {
+            // Create an Approval Button with a timeout of 15minutes.
+            // this require a manuel validation in order to deploy on production environment
+                    timeout(time: 15, unit: "MINUTES") {
+                        input message: 'Do you want to deploy in production ?', ok: 'Yes'
+                    }
+
+                script {
+                sh '''
+                rm -Rf .kube
+                mkdir .kube
+                ls
+                cat $KUBECONFIG > .kube/config
+                cp fastapi/values.yaml values.yml
+                cat values.yml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                helm upgrade --install app fastapi --values=values.yml --namespace prod
+                '''
+                }
+            }
+
+        }
+
+}
+}
+```
+Vous devez remplacer fallewi/datascientestapi par votre dockerhub ID suivi du nom de votre image dans le format yourdocker_hub_id/datascientestapi Une fois ceci terminé, nous pouvons passer à la gestion des versions de notre projet :
+```
+git config --global user.name "fall lewis Datascientest"
+git config --global user.email "fall-lewis.y@datascientest.com"
+git init
+```
+Affichage en sortie :
+```
+Initialized empty Git repository in /home/ubuntu/datascientest-jenkins/.git/
+```
+Nous allons demander à git de suivre nos fichiers et nous allons ensuite créer un commit :
+```
+git add . # add all file and folder
+git commit -m "first version"
+```
+Affichage en sortie :
+```
+[master (root-commit) 6262b89] first commit
+ 14 files changed, 425 insertions(+)
+ create mode 100644 Dockerfile
+ create mode 100644 app/main.py
+ create mode 100644 fastapi/.helmignore
+ create mode 100644 fastapi/Chart.yaml
+ create mode 100644 fastapi/templates/NOTES.txt
+ create mode 100644 fastapi/templates/_helpers.tpl
+ create mode 100644 fastapi/templates/deployment.yaml
+ create mode 100644 fastapi/templates/hpa.yaml
+ create mode 100644 fastapi/templates/ingress.yaml
+ create mode 100644 fastapi/templates/service.yaml
+ create mode 100644 fastapi/templates/serviceaccount.yaml
+ create mode 100644 fastapi/templates/tests/test-connection.yaml
+ create mode 100644 fastapi/values.yaml
+ create mode 100644 requirements.txt
+```
+Nous allons récupérer le chemin de notre projet en SSH et le rajouter afin de pouvoir pousser notre code sur notre dépôt distant :
+![alt text](image-40.png)
+
+Nous allons rajouter ce chemin sur notre dépôt local :
+```
+git remote add origin urldevotredépot
+```
+La dernière étape consiste à générer une paire de clés sur notre machine et à fournir la clé publique à Github afin que nous puissions nous authentifier et pousser notre code sur notre dépôt distant :
+```
+ssh-keygen
+```
+affichage en sortie :
+```
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/ubuntu/.ssh/id_rsa):
+```
+La machine nous demande le chemin sur lequel nous voulons sauvegarder notre clé privée. Nous pouvons appuyer la touche Entrée de notre clavier pour cette étape et pour les suivantes jusqu'à ce que l'opération soit terminée :
+```
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/ubuntu/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/ubuntu/.ssh/id_rsa
+Your public key has been saved in /home/ubuntu/.ssh/id_rsa.pub
+The key fingerprint is:
+SHA256:KcYwM0dWAfVMyO7Q635x6ieG/c/jeLlPbBX/ZtKdUxM ubuntu@ip-172-31-26-97
+The key's randomart image is:
++---[RSA 3072]----+
+|      +=+o.      |
+|     o  o+       |
+|    = .o  o    E |
+|     B. o.      +|
+|      +oS.     .+|
+|     . .o . .  oB|
+|       . o +  .+X|
+|        o <i>.o+</i>.|
+|       ..+.+o+=+.|
++----[SHA256]-----+
+```
+Affichons le contenu de notre clé privée :
+```
+cat ~/.ssh/id_rsa.pub
+```
+Affichage en sortie :
+```
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCzm8eg2jLPCQ3WKfS3rE2qrFCPtyY5yb81X/K73f8FQt9KLI0PXLuPwVqlQ/sMopC22o17R8zd/8ndzw0y5h/TQf0u5P/feZ7YA4gPYX6eFc+n/eAY+jGAJ4sUQjI1/boXslW8wia23QVD9S+m5g1xNIUkV4zOBI3srVa1Dkh9VFh0hXL1rclG+VByC6kq0fM2wqxF62KhOueQsLz9Yvi80gLUk6aJkHmAXNs1X4HhR0ysEwFuO1T7ZOY9jZRYEU8KNFfp99vIdTLgJWHEFdmm+0eS4yEXyCuFK73tyS2cSQg6uglMk+ZymEPHlQPMfzYSLacYF4Onk60JqL8qYUHcjX4+V5Gz4xWN3xA3G6yKFVb4UcsQlktnR1aOJb1H3Kqgz8pWTfLFvy+2hrKcJ4fSYltbuCd/3/4V3OrG/bloURp5ReVrrzlXEKibh7OO18eZ9r0Qc5v/thxtap4x8c+Y9QzfvfaEd3on1forHAPxiYKknXKUlkZR5dox6UKeGmM= ubuntu@ip-172-31-26-97
+```
+Nous irons copier cette clé sur notre compte Github, notre clé privée qui est le fichier ~/.ssh/id_rsa doit être conservé précieusement et par conséquent non divulgué . Sur notre compte Github, nous irons sur la partie profile et en suite nous cliquerons sur le sous-menu settings.
+![alt text](image-41.png)
+
+Nous cliquerons ensuite sur le menu SSH and GPG keys
+![alt text](image-42.png)
+
+Nous pouvons à présent cliquer sur le bouton New SSH Key. Nous fournissons le titre serveur_datascientest à notre clé SSH, nous laissons le champ Key type à Authentication Key et nous remplissons la valeur copiée depuis notre serveur sur le fichier ~/.ssh/id_rsa.pub.
+
+Nous pouvons à présent enregistrer en cliquant sur le bouton Add SSH Key.
+![alt text](image-43.png)
+
+Une fois ceci terminé, nous devons entrer notre mot de passe Github afin que nous puissions confirmer que c'est bien nous l'auteur de la modification. Nous pouvons à présent pousser notre code sur notre dépôt distant :
+```
+git push origin master
+```
+Affichage en sortie :
+```
+Enumerating objects: 20, done.
+Counting objects: 100% (20/20), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (18/18), done.
+Writing objects: 100% (20/20), 5.96 KiB | 2.98 MiB/s, done.
+Total 20 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), done.
+To github.com:fallewi/Jenkins-datascientest.git
+ * [new branch]      master -> master
+```
+
+## G - Exécuter le Job Jenkins pour la première fois
+Jusqu'à présent, nous avons mis en place la configuration nécessaire. Ensuite, nous sommes prêts à exécuter notre Job Jenkins. Nous devons déclencher le Job une première fois afin de pouvoir utiliser les Webhooks configurés entre Jenkins et Github.
+
+Pour le faire nous pouvons revenir sur le tableau de bord Jenkins et cliquer sur notre Job.
+![alt text](image-44.png)
+
+Enfin cliquer sur le bouton Build Now.
+![alt text](image-45.png)
+
+Nous pouvons cliquer sur l'id du Build #1 afin d'accéder au premier Build de notre Pipeline.
+![alt text](image-46.png)
+
+Nous pouvons ensuite cliquer sur le menu Pipeline Overview afin d'avoir un visuel sur les différentes étapes du Pipeline.
+![alt text](image-47.png)
+
+Nous avons le pipeline qui est lancé et passe toutes les étapes. Cependant, il coince sur la dernière étape qui est le déploiement en production attendant notre validation. Nous pouvons cliquer que l'étape Deploiement en prod et sur le menu déroulant Wait for interactive input.
+![alt text](image-48.png)
+
+Nous devons valider afin que le déploiement en environnement de production puisse se faire.
+![alt text](image-49.png)
+
+Nous pouvons donc cliquer en haut sur l'id du build , et ensuite cliquer sur le menu Console Output
+![alt text](image-50.png)
+
+Pour valider cette étape nous devons cliquer sur le bouton yes tout en bas afin d'approuver le déploiement en production.
+![alt text](image-51.png)
+
+Nous pouvons valider que toutes les étapes se sont déroulées avec succès.
+![alt text](image-52.png)
+
+Vérifions à présent notre compte Docker Hub afin de vérifier que nous avons bien poussé l'image.
+![alt text](image-53.png)
+
+Nous pouvons voir que l'image est bien présente.
+
+Vérifions également notre cluster Kubernetes afin de valider que nous avons bien la version de notre application dans les différents Namespaces dev, test et prod.
+```
+kubectl get all -n dev
+```
+Affichage en sortie :
+```
+NAME                              READY   STATUS    RESTARTS   AGE
+pod/app-fastapi-c68c579c6-kwqns   1/1     Running   0          18m
+
+NAME                  TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+service/app-fastapi   NodePort   10.43.221.26   <none>        80:30906/TCP   18m
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/app-fastapi   1/1     1            1           18m
+
+NAME                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/app-fastapi-c68c579c6    1         1         1       18m
+```
+Nous avons bien notre Pod à l'état running et notre service qui écoute sur le port 30906.
+
+Vous aurez certainement un port différent sur votre cluster. Utilisez vos ports pour la suite des tests.
+Connectons-nous à présent sur notre serveur et sur ce port spécifique afin de valider que nous avons bien notre application déployée . L'adresse est la suivante : http://votreip:votrenodeport.
+
+Nous arrivons bien sur notre API.
+
+Nous pouvons répéter les mêmes actions pour les Namespaces staging et prod afin de valider que tout est en ordre.
+
+Modifiions à présent le contenu de notre fichier app/main.py de la façon suivante :
+```
+from typing import Union
+from fastapi import FastAPI
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"Hello": "We Love Datascientest, and we did it. We build a CI/CD Pipeline !!"}
+```
+Nous pouvons ajouter notre modification au dépôt local et pousser notre code afin de vérifier si l'automatisation se mettra en place :
+```
+git add .
+git commit -m "we did it"
+git push origin master
+```
+Affichage en sortie :
+```
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 390 bytes | 390.00 KiB/s, done.
+Total 4 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To github.com:fallewi/Jenkins-datascientest.git
+   e601dc8..46d38fb  master -> master
+```
+Nous pouvons remarquer qu'une seconde construction a été déclenchée automatiquement :
+![alt text](image-54.png)
+
+Toutes les étapes seront rejouées par Jenkins. Une fois terminé, nous pouvons à présent vérifier si nous avons la mise à jour faite sur notre application et sur nos différents environnements.
+
+Récupérons les informations sur le Namespace de production et vérifions la mise à jour de notre application :
+```
+kubectl get all -n prod
+```
+Affichage en sortie :
+```
+NAME                               READY   STATUS    RESTARTS   AGE
+pod/app-fastapi-56c597645f-glmss   1/1     Running   0          2m14s
+
+NAME                  TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+service/app-fastapi   NodePort   10.43.135.194   <none>        80:31377/TCP   20m
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/app-fastapi   1/1     1            1           20m
+
+NAME                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/app-fastapi-56c597645f   1         1         1       2m14s
+replicaset.apps/app-fastapi-65f9f4d86    0         0         0       12m
+```
+vérifions à présent notre application sur le port 31377 de notre serveur :
+
+![alt text](image-55.png)
+
+Nous avons mis en place notre pipeline CI/CD avec Jenkins de bout en bout. Et à présent, à chaque changement de code, Jenkins pourra redéployer notre code jusqu'en environnement de staging et ne pourra déployer en production qu'après notre validation manuelle. Nous avons donc mis en place un cas de Livraison Continue avec Jenkins.
