@@ -2295,3 +2295,58 @@ pipeline {
     }
 }
 ```
+# IX - Conclusion et évaluation
+Le DevOps est un écosystème en constante évolution dans l'industrie du développement, et les outils CI/CD dans ce domaine sont très critiques. Les pratiques CI/CD gèrent efficacement le désalignement entre les développeurs et l'équipe opérationnelle.
+
+Il existe aujourd'hui plusieurs outils conçus à cet effet sur le marché, mais Jenkins occupe une position établie dans l'industrie ainsi qu'un avenir prometteur devant lui en raison de ses avantages open source et d'une large gamme de plugins.
+
+De plus, il s'intègre bien à GitHub, permettant productivité et flexibilité dans le cycle DevOps.
+
+Vous avez pu voir tout au long de ce cours différentes notions et il est temps à présent de passer à la pratique. Vous avez toutes les cartes en main pour vous lancer et mettre en place un pipeline CI/CD afin d'augmenter la vélocité des livraisons de votre entreprise afin de la rendre plus compétitive sur le marché.
+
+Contexte de L'examen :
+![alt text](image-81.png)
+
+Vous êtes recruté en tant qu'ingénieur Devops Junior chez un client.
+
+Parce qu’il englobe deux fonctions, le métier de DevOps regroupe les missions du développeur et celles de l’administrateur système. En tant qu' Ingénieur DevOps junior, vous garantissez le déploiement automatisé et le bon fonctionnement des solutions une fois lancées, et tout au long de leur cycle de vie.
+
+Ce faisant, vous serez chargé(e) de :
+
+Définir l'architecture de l'application et des besoins en termes de découpage des micro-services.
+
+Concevoir et mener les tests nécessaires pour garantir une mise en service réussie de l’application.
+
+Accompagner l’intégration et le déploiement de la solution.
+
+Veiller à la bonne prise en main de la solution par les utilisateurs.
+
+Prendre en charge les formations si nécessaire.
+
+De manière globale, assurer le bon fonctionnement de l’application, intervenir lorsque des anomalies surgissent, assurer les mises à jour et les évolutions techniques. À toutes les étapes du projet, depuis l’écriture du code jusqu’à l’utilisation de l’application, vous êtes soumis à une obligation de qualité.
+
+L'application produite par les développeurs est disponible sur le dépôt GitHub examen.
+
+Vous devez donc pour ce projet :
+
+Installer l'environnement de déploiement de l'application, à savoir Kubernetes. Ce cluster Kubernetes aura 04 environnements de déploiements à savoir : dev, QA, staging, et prod. Vous utiliserez le principe de Namespace au sein de Kubernetes afin de créer vos différents environnements.
+
+Récupérer ce projet sur votre propre dépôt Github.
+
+Configurer un compte sur DockerHub afin de stocker vos différentes images produites.
+
+Installer Jenkins pour ma mise en place de l'automatisation.
+
+Produire un Jenkinsfile pour l'automatisation grâce à Jenkins.
+
+Le dépôt applicatif vous fournit un fichier docker-compose ainsi que les charts HELM qui vous permettront de déployer cette application.
+
+Le déploiement en environnement de production devra se faire manuellement et à la seule condition que la branche concernée soit la branche Master.
+
+Mettre en place de l'automatisation grâce à Jenkins.
+
+Les livrables :
+
+Un fichier zip renommé sous le format nom_prenom_promo_année.
+
+Ce fichier contiendra un fichier texte avec le lien du dépôt Github, les captures des résultats au sein de Jenkins dans un fichier PDF et un fichier texte avec le lien du Dockerhub afin que nous puissions vérifier l'existence des images poussées.
