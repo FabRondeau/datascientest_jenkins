@@ -2088,3 +2088,210 @@ Nous pouvons à présent définir les droits qu'aura ce groupe. Donnons à ce gr
 
 Une fois ces actions terminées, nous pouvons créer la relation entre notre utilisateur et notre nouveau rôle. Nous restons sur le menu Manage and Assign Roles et nous choisissons le menu assign roles. Une fois que nous y sommes, nous pouvons remplir le nom de notre utilisateur sur le champ user/group to add définir le rôle auquel il appartient en cliquant sur la case à cocher du rôle que nous voulons assigner.
 ![alt text](image-76.png)
+# VIII - Notification par e-mail
+
+## A - Présentation
+Nous pouvons être informés des événements qui se produisent dans nos Jobs Jenkins. Il existe des plugins Jenkins pour Slack, Mattermost et les e-mails. Le courrier électronique étant la principale source de communication en ligne, voyons comment le configurer à l'aide du plugin Mailer Jenkins.
+
+## B - Configuration
+Nous pouvons envoyer une notification à notre équipe lorsqu'une tâche a échoué.
+
+Voici les étapes à effectuer :
+
+Accédons à Manage Jenkins
+
+Cliquons sur le menu System.
+
+Une fois que nous y sommes, nous pouvons défiler vers le bas jusqu'à ce que vous trouviez la section E-mail Notification.
+
+Entrons notre serveur SMTP. Supposons que nous souhaitions configurer un compte Gmail pour envoyer des e-mails à votre équipe. Dans ce cas, nous configurons smtp.gmail.com en tant que serveur SMTP.
+
+Cliquons ensuite sur le bouton Advanced. Entrons le port SMTP de Gmail qui est 465.
+
+Cochons la case Use SSL puis cliquons sur Use SMTP Authentication.
+
+Dans la sous-section d'authentification, nous trouvons le champ User Name qui devrait être le compte Gmail que nous souhaitons utiliser pour envoyer nos notifications. Nous trouverons également le champ password qui est le mot de passe SMTP du fournisseur de service de messagerie (Gmail dans ce cas).
+
+Pour obtenir ce mot de passe, appliquons les étapes suivantes :
+
+Rendez-vous sur votre compte Gmail, si vous n'en avez pas, vous pouvez le créer à cette adresse
+
+Cliquons sur notre photo de profil sur le compte Gmail que nous souhaitons configurer.
+
+Cliquons sur le bouton Gérer votre compte Google.
+![alt text](image-77.png)
+
+Pour que cette méthode fonctionne, la double authentification doit être obligatoirement activée !
+Choisissons l'onglet Sécurité dans le panneau de gauche.
+![alt text](image-78.png)
+
+Dans la section Se connecter à Google, assurons-nous d'avoir effectué la vérification en deux étapes. S'il n'est pas activé, cliquons dessus pour effectuer cette vérification.
+![alt text](image-79.png)
+
+Rendons nous sur le lien suivant App Password et entrons un nom le notre application Jenkins
+Nous aurons alors un pop-up avec un mot de passe à copier. Il s'agit du mot de passe SMTP que nous devons coller dans la configuration de Jenkins.
+![alt text](image-80.png)
+
+Après avoir mis en place les configurations de notification par e-mail sur Jenkins, testons d'abord cette configuration avant de l'implémenter sur Jenkinsfile.
+
+Faites défiler vers le bas jusqu'à ce que vous trouviez cette case à cocher : Test configuration by sending test e-mail. Cochons-la, entrons le destinataire de l'e-mail.
+
+Puis appuyez sur le bouton test configuration. Nous devrions maintenant voir un e-mail envoyé à ce destinataire.
+
+Cliquons sur le bouton save, puis voyons comment configurer le pipeline.
+
+Un cas d'utilisation utile pour les notifications par e-mail consiste à les envoyer chaque fois qu'il y a une défaillance dans le pipeline. La clause failure pourra donc nous aider dans ce sens. Nous pourrons écrire de notre envoi d'email de la façon suivante :
+```
+// ..
+post {
+    // ..
+    failure {
+        echo "This will run if the job failed"
+        mail to: "fall-lewis.y@datascientest.com",
+             subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has failed",
+             body: "For more info on the pipeline failure, check out the console output at ${env.BUILD_URL}"
+    }
+    // ..
+}
+```
+L'étape mail ici consiste à appeler le plugin Mailer avec les arguments suivants : to, subject et body. Vous devez changer l'adresse email au moment effectuer vos tests. Pour pouvoir tester l'envoi de l'e-mail dans notre contexte, vous devons faire échouer le pipeline.
+
+Lorsque nous exécuterons un Job Jenkins qui échouera, un e-mail nous sera envoyé.
+
+Notre fichier Jenkinsfile final sera le suivant :
+```
+pipeline {
+    environment { // Declaration of environment variables
+        DOCKER_ID = "fallewi" // replace this with your docker-id
+        DOCKER_IMAGE = "datascientestapi"
+        DOCKER_TAG = "v.${BUILD_ID}.0" // we will tag our images with the current build in order to increment the value by 1 with each new build
+    }
+    agent any // Jenkins will be able to select all available agents
+    stages {
+        stage('Docker Build'){ // docker build image stage
+            steps {
+                script {
+                    sh '''
+                        docker rm -f jenkins
+                        docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
+                    sleep 6
+                    '''
+                }
+            }
+        }
+
+        stage('Docker run'){ // run container from our builded image
+            steps {
+                script {
+                    sh '''
+                    docker run -d -p 80:80 --name jenkins $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+                    sleep 10
+                    '''
+                }
+            }
+        }
+
+        stage('Test Acceptance'){ // we launch the curl command to validate that the container responds to the request
+            steps {
+                script {
+                    sh '''
+                    curl localhost
+                    '''
+                }
+            }
+        }
+
+        stage('Docker Push'){ //we pass the built image to our docker hub account
+            environment
+            {
+                DOCKER_PASS = credentials("DOCKER_HUB_PASS") // we retrieve  docker password from secret text called docker_hub_pass saved on jenkins
+            }
+
+            steps {
+                script {
+                sh '''
+                docker login -u $DOCKER_ID -p $DOCKER_PASS
+                docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+                '''
+                }
+            }
+        }
+
+        stage('Deploiement en dev'){
+            environment {
+                KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+            }
+            steps {
+                script {
+                    sh '''
+                    rm -Rf .kube
+                    mkdir .kube
+                    ls
+                    cat $KUBECONFIG > .kube/config
+                    cp fastapi/values.yaml values.yml
+                    cat values.yml
+                    sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                    helm upgrade --install app fastapi --values=values.yml --namespace dev
+                    '''
+                }
+            }
+        }
+
+        stage('Deploiement en staging'){
+            environment {
+                KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+            }
+            steps {
+                script {
+                sh '''
+                rm -Rf .kube
+                mkdir .kube
+                ls
+                cat $KUBECONFIG > .kube/config
+                cp fastapi/values.yaml values.yml
+                cat values.yml
+                sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                helm upgrade --install app fastapi --values=values.yml --namespace staging
+                '''
+                }
+            }
+        }
+
+        stage('Deploiement en prod'){
+            environment {
+                KUBECONFIG = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+            }
+            steps {
+            // Create an Approval Button with a timeout of 15minutes.
+            // this require a manuel validation in order to deploy on production environment
+                timeout(time: 15, unit: "MINUTES") {
+                    input message: 'Do you want to deploy in production ?', ok: 'Yes'
+                }
+
+                script {
+                    sh '''
+                    rm -Rf .kube
+                    mkdir .kube
+                    ls
+                    cat $KUBECONFIG > .kube/config
+                    cp fastapi/values.yaml values.yml
+                    cat values.yml
+                    sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
+                    helm upgrade --install app fastapi --values=values.yml --namespace prod
+                    '''
+                }
+            }
+        }
+    }
+    post { // send email when the job has failed
+        // ..
+        failure {
+            echo "This will run if the job failed"
+            mail to: "fall-lewis.y@datascientest.com",
+                subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has failed",
+                body: "For more info on the pipeline failure, check out the console output at ${env.BUILD_URL}"
+        }
+        // ..
+    }
+}
+```
